@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toyota Strategic Analysis - Group 6</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          animation: {
+            'spin-slow': 'spin 3s linear infinite',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Custom Scrollbar for better UX */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
+    
+    .tab-content { display: none; animation: fadeIn 0.5s ease-out forwards; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .expandable-content { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.3s ease-in-out; }
+    .expandable-content.open { max-height: 500px; opacity: 1; margin-top: 1rem; }
+    .chevron-icon { transition: transform 0.3s ease; }
+    .chevron-icon.open { transform: rotate(180deg); }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 font-sans antialiased">
+
+  <!-- Dictionary Data (Injected via JS below) -->
+  
+  <!-- Navigation -->
+  <nav class="fixed w-full z-50 top-0 transition-colors duration-300 shadow-md bg-white dark:bg-gray-800" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 text-xs sm:text-base">
+        <div class="flex items-center">
+          <i data-lucide="car" class="h-8 w-8 text-red-600 mr-2"></i>
+          <span class="font-bold text-xl tracking-tight hidden md:block">Toyota SMMC</span>
+        </div>
+        <div class="flex items-center space-x-2 sm:space-x-4 overflow-x-auto" id="nav-links">
+          <a href="#tp0" class="hover:text-red-500 font-semibold px-2 whitespace-nowrap nav-t-tp0">簡介現況</a>
+          <a href="#tp1" class="hover:text-red-500 font-semibold px-2 whitespace-nowrap nav-t-tp1">外部環境</a>
+          <a href="#tp2" class="hover:text-red-500 font-semibold px-2 whitespace-nowrap nav-t-tp2">內部資源</a>
+          <a href="#tp3" class="hover:text-red-500 font-semibold px-2 whitespace-nowrap nav-t-tp3">策略挑戰</a>
+          <a href="#conclusion" class="hover:text-red-500 font-semibold px-2 whitespace-nowrap nav-t-conclusion">總結</a>
+          <a href="#appendices" class="hover:text-red-500 font-semibold px-2 whitespace-nowrap nav-t-appendices">附錄</a>
+          <a href="#team" class="hover:text-red-500 font-semibold px-2 whitespace-nowrap nav-t-team">團隊</a>
+          
+          <div class="flex items-center border-l pl-4 border-gray-300 dark:border-gray-600 space-x-2">
+            <button id="langToggle" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition text-sm font-bold">
+              <i data-lucide="globe" class="h-4 w-4"></i> <span id="langText">EN</span>
+            </button>
+            <button id="themeToggle" class="p-1.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+              <i data-lucide="moon" class="h-5 w-5 block dark:hidden"></i>
+              <i data-lucide="sun" class="h-5 w-5 hidden dark:block text-yellow-400"></i>
+            </button>
+            <button id="glossaryBtn" class="p-1.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+              <i data-lucide="book-open" class="h-5 w-5"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-24">
+    
+    <!-- Hero / Executive Summary -->
+    <section id="hero" class="rounded-3xl p-8 sm:p-12 shadow-lg text-center relative overflow-hidden bg-white dark:bg-gray-800">
+      <div class="absolute top-0 right-0 -mr-16 -mt-16 text-gray-100 dark:text-gray-700 opacity-50"><i data-lucide="car" style="width:300px;height:300px;"></i></div>
+      <div class="relative z-10">
+        <h1 id="heroTitle" class="text-4xl sm:text-6xl font-extrabold text-red-600 mb-4">豐田汽車策略分析</h1>
+        <p id="heroSub" class="text-xl sm:text-2xl font-medium mb-8 text-gray-600 dark:text-gray-300">邁向全方位移動服務公司</p>
+        <div class="max-w-3xl mx-auto text-left p-6 rounded-xl shadow-inner bg-gray-50 dark:bg-gray-700">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="text-lg font-bold flex items-center"><i data-lucide="info" class="mr-2 h-5 w-5"></i> <span id="heroSumTitle">綜合執行摘要</span></h3>
+            <button id="audioBtn" class="flex items-center text-sm bg-red-100 text-red-700 hover:bg-red-200 px-3 py-1 rounded-full transition dark:bg-red-900 dark:text-red-100">
+              <i data-lucide="play-circle" class="mr-1 h-4 w-4" id="audioIcon"></i> Audio Guide
+            </button>
+          </div>
+          <p id="heroSumText" class="leading-relaxed text-base sm:text-lg">面對 CASE 革命與全球碳中和目標，Toyota 正從傳統汽車製造商轉型為「移動服務公司」。透過「多樣化能源路徑策略」與TPS（豐田生產方式），在維持獲利能力的同時，積極投資未來創新與軟體定義汽車(SDV)。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TP0: Intro -->
+    <section id="tp0" class="scroll-mt-24">
+      <div class="flex items-center justify-center mb-8">
+        <span class="p-3 bg-red-100 text-red-600 rounded-full mr-4 dark:bg-red-900/50 dark:text-red-400 shadow-sm"><i data-lucide="globe"></i></span>
+        <h2 id="tp0Title" class="text-3xl sm:text-4xl font-extrabold text-center tracking-tight">公司簡介與現況</h2>
+      </div>
+      
+      <div class="grid lg:grid-cols-2 gap-8 mt-8">
+         <div class="space-y-4" id="tp0CardsContainer">
+           <!-- Cards injected via JS -->
+         </div>
+         
+         <div class="p-8 rounded-3xl shadow-lg border border-gray-100 dark:border-gray-800 flex flex-col justify-center h-fit sticky top-28 bg-white dark:bg-gray-800">
+            <h3 id="tp0PortTitle" class="text-2xl font-bold mb-8 text-center">產品組合營收佔比 (2023)</h3>
+            <div class="space-y-6" id="tp0PortContainer">
+              <!-- Portfolio bars injected via JS -->
+            </div>
+            <p id="tp0PortNote" class="text-sm text-center text-gray-500 mt-8 mt-auto">
+              * HEV 作為核心現金牛提供穩定現金流，支持未來 BEV/FCEV 擴張。
+            </p>
+         </div>
+      </div>
+    </section>
+
+    <!-- TP1: External -->
+    <section id="tp1" class="scroll-mt-24">
+      <div class="flex items-center justify-center mb-8">
+        <span class="p-3 bg-red-100 text-red-600 rounded-full mr-4 dark:bg-red-900/50 dark:text-red-400 shadow-sm"><i data-lucide="bar-chart"></i></span>
+        <h2 id="tp1Title" class="text-3xl sm:text-4xl font-extrabold text-center tracking-tight">外部與產業環境分析</h2>
+      </div>
+      
+      <div class="grid lg:grid-cols-3 gap-8 mt-8">
+        <!-- 5 Forces -->
+        <div class="lg:col-span-2 p-6 rounded-2xl shadow-md bg-white dark:bg-gray-800">
+          <h3 id="tp1ForcesTitle" class="text-xl font-bold mb-6 border-b pb-2 dark:border-gray-700 flex items-center"><i data-lucide="activity" class="mr-2 text-red-500"></i>波特五力分析 (集團與產業視野)</h3>
+          <div class="space-y-5" id="tp1ForcesContainer"></div>
+        </div>
+        <!-- PESTEL -->
+        <div class="p-6 rounded-2xl shadow-md bg-white dark:bg-gray-800">
+          <h3 id="tp1PestelTitle" class="text-xl font-bold mb-6 border-b pb-2 dark:border-gray-700 flex items-center"><i data-lucide="globe" class="mr-2 text-blue-500"></i>PESTEL 總體環境趨勢</h3>
+          <div class="space-y-5" id="tp1PestelContainer"></div>
+        </div>
+      </div>
+
+      <!-- Competitor & Lifecycle -->
+      <div class="mt-8 space-y-8">
+        <div class="p-6 rounded-2xl shadow-md bg-white dark:bg-gray-800">
+          <h3 id="tp1CompTitle" class="text-xl font-bold mb-6 border-b pb-2 dark:border-gray-700 flex items-center"><i data-lucide="swords" class="mr-2 text-orange-500"></i>競爭者矩陣分析</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="tp1CompContainer"></div>
+        </div>
+
+        <div class="p-6 sm:p-10 rounded-2xl shadow-md flex flex-col bg-white dark:bg-gray-800">
+          <h3 id="tp1LifeTitle" class="text-xl font-bold mb-8 border-b pb-2 dark:border-gray-700 flex items-center"><i data-lucide="trending-down" class="mr-2 text-teal-500"></i>產業生命週期階段</h3>
+          
+          <!-- Chart -->
+          <div class="w-full bg-[#1a1b26] text-white rounded-xl overflow-hidden shadow-2xl border border-gray-700">
+            <div class="flex h-10 sm:h-14 text-[9px] sm:text-xs font-extrabold text-center items-center uppercase tracking-widest text-white shadow-md relative z-20" id="tp1ChartLabels">
+              <div class="flex-1 bg-[#0099cc] h-full flex items-center justify-center border-r border-white/20">INTRODUCTION</div>
+              <div class="flex-1 bg-[#f59e0b] h-full flex items-center justify-center border-r border-white/20">LAUNCH</div>
+              <div class="flex-1 bg-[#22c55e] h-full flex items-center justify-center border-r border-white/20">MATURITY</div>
+              <div class="flex-1 bg-[#1e3a8a] h-full flex items-center justify-center">DECLINE</div>
+            </div>
+            <div class="relative h-72 sm:h-96 w-full p-4 mt-6 mb-10 mx-auto max-w-[95%]">
+              <div class="absolute left-6 bottom-4 w-[95%] h-[1px] bg-gray-500"></div>
+              <div class="absolute left-6 top-0 bottom-4 w-[1px] bg-gray-500"></div>
+              <div id="tp1YAxis" class="absolute left-0 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] sm:text-xs text-gray-400 tracking-widest origin-center">市場滲透 (Market Penetration)</div>
+              <div id="tp1XAxis" class="absolute bottom-0 right-4 text-[10px] sm:text-xs text-gray-400 tracking-widest">時間 (Time)</div>
+              <div id="tp1ChartPoints"></div>
+            </div>
+          </div>
+          
+          <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="tp1LifeCards"></div>
+        </div>
+      </div>
+
+      <!-- 4P Cards -->
+      <div class="mt-8 space-y-4">
+        <h3 id="tp1OtrTitle" class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-200">外部機會、威脅與 4P 競爭策略</h3>
+        <div id="tp1OtrContainer" class="space-y-4"></div>
+      </div>
+    </section>
+
+    <!-- TP2: Internal -->
+    <section id="tp2" class="scroll-mt-24">
+      <div class="flex items-center justify-center mb-8">
+        <span class="p-3 bg-red-100 text-red-600 rounded-full mr-4 dark:bg-red-900/50 dark:text-red-400 shadow-sm"><i data-lucide="factory"></i></span>
+        <h2 id="tp2Title" class="text-3xl sm:text-4xl font-extrabold text-center tracking-tight">內部資源與核心能耐</h2>
+      </div>
+
+      <!-- Sub Tabs -->
+      <div class="flex flex-wrap justify-center gap-2 mb-10 border-b border-gray-200 dark:border-gray-700 pb-4" id="tp2TabsContainer"></div>
+
+      <!-- Tab Contents -->
+      <div id="tp2-org" class="tab-content active space-y-8">
+        <div class="text-center max-w-3xl mx-auto">
+          <h3 id="tp2OrgTitle" class="text-2xl font-extrabold mb-2">BU / FU / GU 矩陣結構對齊</h3>
+          <p id="tp2OrgDesc" class="text-gray-500 dark:text-gray-400">Toyota 採用並行的組織設計...</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6" id="tp2OrgItems"></div>
+      </div>
+
+      <div id="tp2-valueChain" class="tab-content space-y-12">
+        <div class="text-center max-w-3xl mx-auto">
+          <h3 id="tp2VcTitle" class="text-2xl font-extrabold mb-2">企業價值鏈與營收流映射</h3>
+          <p id="tp2VcDesc" class="text-gray-500 dark:text-gray-400">Toyota 的價值主張並非由單一活動創造...</p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="tp2VcActs"></div>
+        <div class="p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 overflow-x-auto bg-white dark:bg-gray-800">
+          <h4 id="tp2RsTitle" class="text-xl font-bold mb-6 text-center">營收流 (Revenue Streams) 連動對應表</h4>
+          <table class="w-full text-left border-collapse">
+            <thead><tr id="tp2RsHeaders" class="border-b border-gray-200 dark:border-gray-700 text-sm font-extrabold text-gray-500 uppercase tracking-wider"></tr></thead>
+            <tbody id="tp2RsRows" class="divide-y divide-gray-200 dark:divide-gray-700"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="tp2-vrin" class="tab-content space-y-8">
+        <div class="text-center max-w-3xl mx-auto">
+          <h3 id="tp2VrinTitle" class="text-2xl font-extrabold mb-2">資源與可持續競爭優勢 (SCA) 評估</h3>
+          <p id="tp2VrinDesc" class="text-gray-500 dark:text-gray-400">對照豐田的關鍵資源 (KR)...</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6" id="tp2VrinItems"></div>
+      </div>
+
+      <div id="tp2-core" class="tab-content space-y-12">
+        <div class="space-y-6">
+          <div class="text-center max-w-3xl mx-auto">
+            <h3 id="tp2CoreTitle" class="text-2xl font-extrabold mb-2">核心能耐與互補性資產 (關鍵夥伴 KP)</h3>
+            <p id="tp2CoreDesc" class="text-gray-500 dark:text-gray-400">Toyota 運用無比強大的製造 DNA...</p>
+          </div>
+          <div class="grid md:grid-cols-3 gap-6" id="tp2CoreComps"></div>
+        </div>
+        <div class="p-8 rounded-3xl shadow-lg border border-gray-150 bg-white dark:bg-gray-800 dark:border-gray-700">
+          <h4 id="tp2KpTitle" class="text-xl font-bold mb-6 text-center border-b pb-4 dark:border-gray-700">Complementary Assets</h4>
+          <div class="grid md:grid-cols-3 gap-8" id="tp2KpItems"></div>
+        </div>
+      </div>
+
+      <div id="tp2-dynamic" class="tab-content space-y-8">
+        <div class="text-center max-w-3xl mx-auto">
+          <h3 id="tp2DynTitle" class="text-2xl font-extrabold mb-2">動態能力 (Dynamic Capabilities) 轉型</h3>
+          <p id="tp2DynDesc" class="text-gray-500 dark:text-gray-400">探討 Toyota 近 3-5 年如何打破既有「常規」...</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6" id="tp2DynItems"></div>
+      </div>
+    </section>
+
+    <!-- TP3: Strategy -->
+    <section id="tp3" class="scroll-mt-24">
+      <div class="flex items-center justify-center mb-8">
+        <span class="p-3 bg-red-100 text-red-600 rounded-full mr-4 dark:bg-red-900/50 dark:text-red-400 shadow-sm"><i data-lucide="trending-up"></i></span>
+        <h2 id="tp3Title" class="text-3xl sm:text-4xl font-extrabold text-center tracking-tight">集團成長策略與未來挑戰</h2>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-2 mb-10 border-b border-gray-200 dark:border-gray-700 pb-4" id="tp3TabsContainer"></div>
+
+      <div id="tp3-integration" class="tab-content active space-y-12">
+        <div class="text-center max-w-3xl mx-auto">
+          <h3 id="tp3IntTitle" class="text-2xl font-extrabold mb-2">產業價值鏈整合與進入模式 (Entry Modes)</h3>
+          <p id="tp3IntDesc" class="text-gray-500 dark:text-gray-400">Toyota 同步往上游核心技術與下游...</p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-8 relative">
+          <div class="hidden md:block absolute left-1/2 top-10 bottom-10 w-1 bg-red-200 dark:bg-red-900/50 -translate-x-1/2 rounded-full"></div>
+          <div class="p-8 rounded-3xl shadow-lg border-t-8 border-blue-500 relative z-10 bg-white dark:bg-gray-800">
+             <h4 id="tp3UpTitle" class="text-xl font-extrabold mb-6 text-blue-600 dark:text-blue-400 flex items-center gap-2">
+               <i data-lucide="arrow-right" class="md:hidden"></i> 上游整合
+             </h4>
+             <ul class="space-y-4" id="tp3UpItems"></ul>
+          </div>
+          <div class="p-8 rounded-3xl shadow-lg border-t-8 border-green-500 relative z-10 bg-white dark:bg-gray-800">
+             <h4 id="tp3DownTitle" class="text-xl font-extrabold mb-6 text-green-600 dark:text-green-400 flex items-center gap-2">
+               <i data-lucide="arrow-right" class="md:hidden"></i> 下游整合
+             </h4>
+             <ul class="space-y-4" id="tp3DownItems"></ul>
+          </div>
+        </div>
+
+        <div class="p-8 rounded-3xl shadow-md border bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700">
+          <h4 class="text-xl font-bold mb-6 text-center border-b pb-4 dark:border-gray-700" id="tp3ModeTitle">Governance & Entry Modes</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="tp3Modes"></div>
+        </div>
+      </div>
+
+      <div id="tp3-bcg" class="tab-content space-y-12">
+        <div class="text-center max-w-3xl mx-auto">
+          <h3 id="tp3BcgTitle" class="text-2xl font-extrabold mb-2">BCG 矩陣與規模經濟</h3>
+          <p id="tp3BcgDesc" class="text-gray-500 dark:text-gray-400">建構「自我循環的增長體系」...</p>
+        </div>
+        <div class="relative max-w-4xl mx-auto">
+          <div class="absolute -left-8 top-1/2 -translate-y-1/2 -rotate-90 font-extrabold text-gray-400 tracking-widest text-sm">MARKET GROWTH</div>
+          <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 font-extrabold text-gray-400 tracking-widest text-sm">MARKET SHARE</div>
+          <div class="grid grid-cols-2 grid-rows-2 gap-4 p-4 bg-gray-200 dark:bg-gray-700 rounded-3xl shadow-inner" id="tp3BcgMatrix"></div>
+        </div>
+        <div id="tp3BcgSyn" class="p-6 rounded-2xl shadow-sm text-center border-l-4 border-red-500 font-medium bg-red-50 text-red-900 dark:bg-gray-800 dark:text-gray-300"></div>
+      </div>
+
+      <div id="tp3-global" class="tab-content space-y-8">
+        <div class="text-center max-w-3xl mx-auto">
+          <h3 id="tp3GloTitle" class="text-2xl font-extrabold mb-2">全球化地理擴張</h3>
+          <p id="tp3GloDesc" class="text-gray-500 dark:text-gray-400">依據各地緣政治採取不同跨國策略...</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6" id="tp3GloRegions"></div>
+      </div>
+
+      <div id="tp3-roadmap" class="tab-content space-y-8">
+        <div class="text-center max-w-4xl mx-auto">
+          <h3 id="tp3RoadTitle" class="text-2xl font-extrabold mb-6">固態電池時間線</h3>
+          <div class="p-6 sm:p-8 rounded-3xl shadow-sm border mb-12 text-left flex flex-col sm:flex-row items-center sm:items-start gap-6 transition-colors bg-blue-50 border-blue-100 dark:bg-blue-900/20 dark:border-blue-800">
+            <div class="p-4 bg-blue-500 text-white rounded-full flex-shrink-0 animate-pulse shadow-lg"><i data-lucide="battery-charging" class="w-8 h-8"></i></div>
+            <p id="tp3RoadDesc" class="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed font-medium"></p>
+          </div>
+        </div>
+        <div class="max-w-4xl mx-auto relative px-4 sm:px-0">
+          <div class="absolute left-8 sm:left-1/2 top-0 bottom-0 w-1 bg-gray-200 dark:bg-gray-700 transform sm:-translate-x-1/2 rounded-full"></div>
+          <div class="space-y-12 relative" id="tp3RoadMs"></div>
+        </div>
+      </div>
+
+      <div id="tp3-challenges" class="tab-content space-y-8">
+        <div class="text-center max-w-3xl mx-auto">
+          <h3 id="tp3ChaTitle" class="text-2xl font-extrabold mb-2">未來挑戰與戰略建議</h3>
+          <p class="text-gray-500 dark:text-gray-400">Identifying critical operating risks.</p>
+        </div>
+        <div class="grid lg:grid-cols-2 gap-8" id="tp3ChaItems"></div>
+      </div>
+
+    </section>
+
+    <!-- Conclusion -->
+    <section id="conclusion" class="scroll-mt-24">
+      <div class="flex items-center justify-center mb-8">
+        <span class="p-3 bg-red-100 text-red-600 rounded-full mr-4 dark:bg-red-900/50 dark:text-red-400 shadow-sm"><i data-lucide="shield"></i></span>
+        <h2 id="conTitle" class="text-3xl sm:text-4xl font-extrabold text-center tracking-tight">TP 期末總結</h2>
+      </div>
+      <div class="p-8 sm:p-12 rounded-3xl shadow-xl border-t-8 border-red-600 flex flex-col items-center text-center bg-white dark:bg-gray-800">
+        <p id="conText" class="text-lg sm:text-xl leading-relaxed text-gray-700 dark:text-gray-300 font-medium max-w-4xl whitespace-pre-line"></p>
+      </div>
+    </section>
+
+    <!-- Appendices & Lab -->
+    <section id="appendices" class="scroll-mt-24 space-y-24 border-t-2 border-dashed border-gray-200 dark:border-gray-700 pt-16 mt-16">
+      
+      <div class="flex items-center justify-center mb-8">
+        <span class="p-3 bg-red-100 text-red-600 rounded-full mr-4 dark:bg-red-900/50 dark:text-red-400 shadow-sm"><i data-lucide="book-open"></i></span>
+        <h2 id="appTitle" class="text-3xl sm:text-4xl font-extrabold text-center tracking-tight">附錄 (Appendices)</h2>
+      </div>
+      
+      <!-- Interactive Lab -->
+      <div>
+        <h3 id="labTitle" class="text-2xl font-bold mb-6 text-center flex justify-center items-center gap-2"><i data-lucide="zap" class="text-yellow-500"></i>互動實驗室</h3>
+        <p id="labDesc" class="text-center mb-8 text-gray-500 dark:text-gray-400 text-lg"></p>
+        
+        <div class="max-w-6xl mx-auto rounded-3xl p-6 sm:p-10 shadow-2xl border border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-700">
+          <div class="flex flex-wrap justify-center gap-3 sm:gap-4 mb-10" id="labControls"></div>
+          
+          <div class="grid lg:grid-cols-12 gap-10 items-stretch" id="labDashboard">
+             <!-- Rendered via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Sources -->
+      <div>
+        <h3 id="srcTitle" class="text-2xl font-bold mb-6 text-center flex justify-center items-center gap-2"><i data-lucide="link" class="text-blue-500"></i>資料與文獻來源</h3>
+        <div class="p-8 rounded-3xl shadow-md border border-gray-100 bg-white dark:bg-gray-800 dark:border-gray-700">
+          <ul class="space-y-4" id="srcList"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team -->
+    <section id="team" class="scroll-mt-24 border-t-2 border-dashed border-gray-200 dark:border-gray-700 pt-16 mt-16">
+      <div class="flex items-center justify-center mb-8">
+        <span class="p-3 bg-red-100 text-red-600 rounded-full mr-4 dark:bg-red-900/50 dark:text-red-400 shadow-sm"><i data-lucide="users"></i></span>
+        <h2 id="teamTitle" class="text-3xl sm:text-4xl font-extrabold text-center tracking-tight">團隊</h2>
+      </div>
+      <p id="teamSub" class="text-center mt-2 mb-8 text-gray-500 dark:text-gray-400"></p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8" id="teamMembers"></div>
+
+      <div class="mt-10 p-8 rounded-2xl shadow-md bg-white dark:bg-gray-800">
+        <h3 class="text-xl font-bold mb-4 border-b pb-2 dark:border-gray-600 flex items-center"><i data-lucide="users" class="mr-2"></i> <span id="collabTitle">Collaboration & AI Disclosure</span></h3>
+        <p id="collabText" class="mb-4 leading-relaxed bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg text-base"></p>
+        <p id="aiText" class="leading-relaxed bg-green-50 dark:bg-green-900/30 p-4 rounded-lg text-base"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-8 text-center mt-12 border-t bg-gray-100 border-gray-200 text-gray-600 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-400">
+    <p id="footerText" class="font-medium text-base sm:text-lg"></p>
+    <p class="text-sm mt-2">© 2026 Strategic Management Final Project</p>
+  </footer>
+
+  <!-- Glossary Modal -->
+  <div id="glossaryModal" class="fixed inset-0 z-[100] justify-end hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="glossaryOverlay"></div>
+    <div class="relative w-full max-w-md h-full shadow-2xl p-6 overflow-y-auto transform translate-x-full transition-transform duration-300 bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-100" id="glossaryPanel">
+      <button id="glossaryClose" class="absolute top-4 right-4 text-2xl font-bold">&times;</button>
+      <h2 id="glTitle" class="text-2xl font-bold mb-6 flex items-center border-b pb-4"><i data-lucide="book-open" class="mr-2"></i>專有名詞解釋</h2>
+      <div class="space-y-6" id="glItems"></div>
+    </div>
+  </div>
+
+  <!-- Scroll to Top -->
+  <button id="scrollTopBtn" class="fixed bottom-8 right-8 p-3 sm:p-4 rounded-full shadow-2xl transition-all duration-300 z-[90] bg-red-600 text-white hover:bg-red-700 hover:scale-110 opacity-0 translate-y-10 pointer-events-none" aria-label="Scroll to top">
+    <i data-lucide="arrow-up" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+  </button>
+
+  <script>
+    // --- Data Dictionary ---
+    const content = {
+      en: {
+        nav: { tp0: "Intro", tp1: "External", tp2: "Internal", tp3: "Strategy", conclusion: "Conclusion", appendices: "Appendices", team: "Team" },
+        hero: { title: "Toyota Strategic Analysis", subtitle: "Transitioning to a Mobility Company", summary: "Executive Summary" },
+        summaryText: "Facing the CASE revolution and global carbon neutrality goals, Toyota is transforming from a traditional automaker to a Mobility Service Company. Through its 'Multi-pathway Strategy' and TPS (Toyota Production System), it aims to maintain market leadership while balancing profitability and innovation.",
+        tp0: { 
+          title: "Company Intro & Current Status", 
+          cards: [
+            { id: 'vision', icon: 'target', title: 'Vision & Mission', summary: 'To produce happiness for all and create mobility for all.', details: ['Transitioning to a Mobility Company', 'Developing Autonomous Driving & SDVs', 'Aiming for carbon neutrality by 2050', 'Building sustainable societies via Woven City'] },
+            { id: 'history', icon: 'clock', title: 'History Milestones', summary: 'From textiles to global mobility leader.', details: ['1937: Founded (transitioned from textiles)', '1950: Business crisis (downsizing & restructuring)', '1966: Corolla launched (key to explosive growth)', '1997: Prius launched (first mass-produced hybrid)', '2015+: Strategic pivot to EVs and Hydrogen'] },
+            { id: 'news', icon: 'newspaper', title: 'Recent News', summary: 'Strategic investments and market shifts.', details: ['Selling US-made Tundra/Highlander in Japan starting April 2026 to meet diverse outdoor needs.', '$1B investment in US plants (Kentucky & Indiana) to expand BEV and Grand Highlander production.'] },
+            { id: 'org', icon: 'network', title: 'Org & Management', summary: 'Hybrid structure & 2026 Leadership transition.', details: ['Hybrid Structure: Functional + Divisional + Matrix layout.', 'Koji Sato: Transitioning to Vice Chairman & Chief Industry Officer (April 2026).', 'Kenta Kon: Promoted to President & CEO focusing on internal operational transformation.'] },
+            { id: 'values', icon: 'award', title: 'The Toyota Way', summary: 'Core values driving the corporate culture.', details: ['Respect for People', 'Kaizen (Continuous Improvement)', 'Customer First', 'Genchi Genbutsu (Go and See the facts)'] }
+          ],
+          portfolio: "Product Portfolio (2023 Net Sales %)",
+          portfolioData: [
+            { name: "ICE (Non-Electrified)", val: 53.1, color: "bg-gray-500" },
+            { name: "HEV (Hybrid)", val: 40.2, color: "bg-green-500" },
+            { name: "PHEV", val: 1.7, color: "bg-blue-400" },
+            { name: "BEV", val: 1.8, color: "bg-blue-600" },
+            { name: "FCEV", val: 0.0, color: "bg-cyan-400" }
+          ]
+        },
+        tp1: { 
+          title: "External & Industry Environment", 
+          forcesTitle: "Porter's 5 Forces", 
+          pestelTitle: "PESTEL Drivers",
+          compTitle: "Competitor Matrix",
+          lifeCycleTitle: "Industry Life Cycle",
+          otrTitle: "Opportunities, Threats & 4P Strategy",
+          forcesData: [
+            { name: "Rivalry (CR5 ~50%)", score: 95, desc: "Extreme price wars; EV shift shortens product life cycles." },
+            { name: "New Entrants (High)", score: 85, desc: "SDV lowers barriers; Tech giants (Xiaomi, Huawei) entering." },
+            { name: "Buyer Power (Mid-High)", score: 75, desc: "High transparency; shift towards cost-performance & smart tech." },
+            { name: "Substitutes (Mid)", score: 50, desc: "Robotaxis, micro-mobility, and public transport offset demand." },
+            { name: "Supplier Power (Mid-Low)", score: 40, desc: "Strong Keiretsu, but rising power of Battery/AI chip makers." }
+          ],
+          pestelData: [
+            { title: "Political", desc: "Global EV mandates & carbon taxes force rapid transition." },
+            { title: "Economic", desc: "High CAPEX for EV transition; battery material volatility." },
+            { title: "Technological", desc: "Paradigm shift to SDV; Multi-pathway tests resource limits." }
+          ],
+          compData: [
+            { name: "VW Group", market: "High", resource: "High", threat: "Maximum (Global full-scale rival)", color: "border-red-500", text: "text-red-600" },
+            { name: "Hyundai-Kia", market: "High", resource: "Mid-High", threat: "High (Rapid EV/volume catch-up)", color: "border-purple-500", text: "text-purple-600" },
+            { name: "BYD", market: "Mid→High", resource: "Mid", threat: "High & Rising (NEV cost advantage)", color: "border-orange-500", text: "text-orange-600" },
+            { name: "Tesla", market: "Mid (EV only)", resource: "Low", threat: "Medium (SDV & AI disruption)", color: "border-blue-500", text: "text-blue-600" }
+          ],
+          chartLabels: { yAxis: "Market Penetration", xAxis: "Time", intro: "INTRODUCTION", launch: "LAUNCH / GROWTH", maturity: "MATURITY", decline: "DECLINE" },
+          lifeCycleData: [
+            { phase: "Introduction", item: "SDV & Woven City", dotLabel: "Introduction", color: "border-blue-500", dotColor: "bg-blue-500", textColor: "text-blue-400", pos: "left-[15%] bottom-[15%]", desc: "Currently in the massive R&D investment stage, serving as a testbed for future mobility. No significant profit yet, but builds crucial long-term competitiveness." },
+            { phase: "Growth / Shakeout", item: "BEV (Pure Electric)", dotLabel: "Growth / Shakeout", color: "border-green-500", dotColor: "bg-green-400", textColor: "text-green-400", pos: "left-[45%] bottom-[40%]", desc: "Experiencing rapid market share expansion. Toyota is accelerating capacity (Targeting 1.5M by 2026, 3.5M by 2030) amidst fierce competition from Tesla and BYD." },
+            { phase: "Maturity", item: "HEV (Hybrid)", dotLabel: "Maturity", color: "border-yellow-500", dotColor: "bg-yellow-400", textColor: "text-yellow-400", pos: "left-[70%] bottom-[65%]", desc: "The group's current 'Super Cash Cow'. Commands a high sales volume (40.2%), contributing the most stable cash flow and high profit margins to fund the EV transition." },
+            { phase: "Decline", item: "ICE (Gasoline)", dotLabel: "Decline", color: "border-pink-500", dotColor: "bg-pink-400", textColor: "text-pink-400", pos: "left-[88%] bottom-[80%]", desc: "Gradually shrinking in proportion due to global carbon neutrality goals. Still meets specific market demands but the overall market scale is structurally declining." }
+          ],
+          cards: [
+            { id: 'opp', icon: 'target', title: 'External Opportunities', summary: 'CASE Revolution & Multi-pathway.', details: ['CASE & SDV: Transforming into a mobility service ecosystem via Woven by Toyota.', 'Multi-pathway: Balancing HEV/BEV/FCEV globally; targeting solid-state batteries by 2027.', 'Social Integration: Woven City as a living lab for AI & smart city testing.', 'Digital Transformation (DX): Halving development time via TNGA & Digital Twins.'] },
+            { id: 'threat', icon: 'alert-triangle', title: 'Threats & Operating Risks', summary: 'Tech giants, regulations, & supply chains.', details: ['Cross-sector Entrants: Tech companies redefining cars as smart terminals.', 'Stricter Regulations: Rising compliance costs for zero-emission mandates.', 'Supply Chain Vulnerability: High reliance on critical minerals (Lithium/Cobalt) and semiconductors.', 'Talent & Cyber Risks: Need for software engineers; rising cybersecurity threats in SDVs.'] },
+            { id: '4p', icon: 'briefcase', title: '4P Competitive Strategy Summary', summary: 'Position, Priority, Posture, Profit.', details: ['Position: From automaker to mobility service & social systems integrator.', 'Priority: Accelerate BEV/Solid-state, fortify Arene OS, & control supply chain costs.', 'Posture: Multi-pathway flexibility, open innovation (SoftBank, Uber), & Lean Production DX.', 'Profit Potential: HEV funds transition; new MaaS revenues; DX reduces OPEX structurally.'] }
+          ]
+        },
+        tp2: { 
+          title: "Internal Resources & Core Competencies",
+          tabs: { org: "Org Alignment", valueChain: "Value Chain & RS", vrin: "SCA (VRIN)", core: "Core & Partners", dynamic: "Dynamic Cap." },
+          org: { title: "BU / FU / GU Matrix Alignment", desc: "Toyota's organizational design balances product diversity (BU), local market responsiveness (GU), and operational scale economics (FU).", items: [{ title: "Geographical Units (GU)", desc: "Enables localized decision-making to adapt to varied local emission policies, infrastructure conditions, and consumer preferences (e.g. bZ3X achieving 90% localization in China)." }, { title: "Business Units (BU)", desc: "Facilitates multi-pathway product development. Product lines function independently, dispersing transition risks across HEV, PHEV, BEV, and FCEV divisions." }, { title: "Functional Units (FU)", desc: "Centralizes core manufacturing, engineering, and digital platforms to maintain global scale economics and deploy standardized production methods (TPS)." }] },
+          valueChain: {
+            title: "Key Activities & Revenue Mapping", desc: "Primary value activities (KA1-KA6) interconnected to deliver product portfolios and optimize cost structure (CS) to maximize customer lifetime value.",
+            activities: [
+              { title: "KA1: TPS Lean Manufacturing", desc: "Just-In-Time and Jidoka concepts reduce waste (Muda) and structurally lower manufacturing costs, supporting competitive pricing." },
+              { title: "KA2: Keiretsu Supply Chain", desc: "Deep supplier integration (Denso, Aisin) ensures resilient parts sourcing, Scope 1/2/3 decarbonization tracking, and local sourcing in 28 countries." },
+              { title: "KA3: R&D & Tech Innovation", desc: "FY2024 R&D spent ¥1.1T. Utilizes dual-direction Digital Twins to slash design-to-production lead time by 50% and consolidates EV factory structures." },
+              { title: "KA4: Brand & Dealer Network", desc: "Operates Dual-brand strategy (Toyota mass market vs. Lexus luxury) to serve diverse target audiences with high-quality service." },
+              { title: "KA5: Financial Services (TFS)", desc: "Generates stable profit (¥300B in FY2024), lowers purchasing barriers, and establishes recurring customer relationships." },
+              { title: "KA6: Service & Circular Economy", desc: "Drives OTA upgrades, SAWA warranty extensions, and executes closed-loop battery 3R (Reduce, Reuse, Recycle) systems." }
+            ],
+            revenueStream: { title: "Revenue Stream (RS) Mapping", headers: ["Revenue Source", "Share", "Linked Activities", "Channels & Target Audience"], rows: [["Vehicle Sales", "~90%", "KA1, KA2, KA3, KA4", "Authorized dealers (CH1); serves general consumers, corporate fleets, and governments."], ["Financial Services", "~8%", "KA5 (TFS)", "Direct financing, dealer networks (CH2); serves purchasing individuals and fleets."], ["Parts & Others", "~2%", "KA6", "After-sales service centers, e-commerce; serves car owners and independent workshops."]] }
+          },
+          vrin: { title: "VRIN Resource Analysis for SCA", desc: "Evaluating how Toyota's key tangible and intangible resources sustain its long-term competitive advantage.", items: [{ title: "Solid-State Battery Tech", v: "Yes (1,000km range, 10-min charge)", r: "Yes (not yet commercialized globally)", i: "Highly inimitable (patented with Panasonic since 1990s)", n: "Yes (far superior to traditional lithium)", s: "Sustainable Competitive Advantage" }, { title: "Multi-Pathway Strategy", v: "Yes (flexible HEV/PHEV/BEV/FCEV mix)", r: "Yes (few rivals cover all paths simultaneously)", i: "Hard to copy (decades of Prius hybrid patent accumulation)", n: "Yes (essential for uneven global grid markets)", s: "Sustainable Competitive Advantage" }, { title: "Global Manufacturing & Localization", v: "Yes (reduces logistics costs & conforms to IRA)", r: "Yes (highly integrated global-local setup)", i: "Inimitable (long-term local supplier trust networks)", n: "Yes (critical in highly protective markets)", s: "Temporary / Sustainable Advantage" }, { title: "NVIDIA AI & Software Integration", v: "Yes (advances self-driving SDV software)", r: "Yes (rare hardware-in-the-loop simulation capabilities)", i: "Inimitable (GPU and complex deep neural net stacking)", n: "Yes (essential for next-generation smart vehicles)", s: "Sustained Partner-led Advantage" }] },
+          core: { title: "Core Competencies & Complementary Assets", desc: "Toyota leverages internal manufacturing DNA and secures complementary assets from global technology leaders.", competencies: [{ title: "TPS & Kaizen Culture", desc: "A bottom-up philosophy motivating every floor worker to eliminate waste, optimize workflows, and maintain extreme production flexibility." }, { title: "Hybrid Technology Leadership", desc: "Unrivaled HEV efficiency and patent fortress serving as the prime cash cow to fund heavy future CASE R&D." }, { title: "Craftsmanship & Digital Twin Integration", desc: "Combining master 'Takumi' skillsets with real-time digital factories to validate processes and secure high-precision vehicle quality." }], partners: [{ name: "Panasonic (Prismatic Batteries)", desc: "Joint Venture PPES secures stable prismatic lithium-ion supply and next-gen battery R&D." }, { name: "NVIDIA (AI Autopilot Platforms)", desc: "Co-develops supercomputing stacks and simulation systems with TRI-AD, ensuring robust HIL validation." }, { name: "NTT (Connected Smart City)", desc: "Partners to construct the 'Smart City Platform' in Woven City, integrating autonomous mobility, IoT, and green hydrogen." }] },
+          dynamic: { title: "Dynamic Capabilities (DC)", desc: "Toyota's capabilities to continuously reconfigure, learn, and alter its existing routines to match shifting CASE environments.", items: [{ title: "Organizational Reconfiguration", desc: "Dissolved rigid functional silos in favor of regional and product-focused divisions (Lexus, GR). Established specialized BEV Factory in 2023." }, { title: "Digital Twin & Software Routines", desc: "Decoupled hardware from software through Arene OS. Integrated OMUSVI system globally to eliminate manual data conversion errors." }, { title: "PDCA to DCAP Learning Loop", desc: "Shifted traditional PDCA to 'Do-Check-Adjust-Plan' for unknown territories. Plans reskilling of 9,000 workers by 2025." }, { title: "Home & Away Resource Reallocation", desc: "Focuses on 'Home' strengths (TPS, HEV) and standardizes 'Away' segments with partners (Subaru, Mazda, Suzuki)." }] }
+        },
+        tp3: { 
+          title: "Growth Strategy & Future Challenges", 
+          tabs: { integration: "Vertical Integration", bcg: "BCG & Economies", global: "Global Expansion", roadmap: "Solid-State Timeline", challenges: "Challenges & Solutions" },
+          integration: { title: "Vertical Integration & Entry Modes", desc: "Upstream technology internalization and downstream service expansion.", upstream: { title: "Upstream (Tech & Supply)", items: ["Battery Internalization: Formed TOYOTA BATTERY Co. & established TBMNC Greenfield plant in the US (Total plant investment of $13.9B, aligning with the $10B 5-year US investment plan).", "Semiconductors: In-house SiC wafer R&D to cut power loss by 50%.", "Software OS: In-house Arene OS development for SDV decoupling."] }, downstream: { title: "Downstream (Services & MaaS)", items: ["MaaS & Subscriptions: Expanding KINTO and MSPF platforms.", "Smart City Integration: Woven City IoT & infrastructure testing.", "Circular Economy: Establishing battery 3R (Reduce, Reuse, Recycle) systems."] }, modes: [{ mode: "Greenfield", desc: "US TBMNC plant for IRA compliance and core tech control." }, { mode: "Joint Venture (JV)", desc: "PPES with Panasonic (Batteries); BYD JV in China (BEVs)." }, { mode: "M&A", desc: "Acquired Daihatsu (compact cars) & Lyft's L5 autonomy unit." }, { mode: "Alliance", desc: "Cross-shareholding with Subaru, Mazda, Suzuki for R&D sharing." }] },
+          bcg: { title: "BCG Matrix & Economies of Scope", desc: "Self-sustaining capital cycle funding future transitions.", synergy: "Economies of Scope: TNGA shares chassis/parts, cutting R&D hours by 25%. Network Effects: 150M existing vehicles boost MaaS & Data services.", matrix: [{ type: "Star", title: "TNGA Core & Lexus", desc: "High growth, high share. Drives current EV transition and luxury margins." }, { type: "Question Mark", title: "BEV, FCEV, SDV", desc: "High growth, low share. Requires massive R&D funded by Cash Cows." }, { type: "Cash Cow", title: "HEVs & Value Chain", desc: "Low growth, high share. Yields stable, massive cash flow (Value chain contributes ~¥2T)." }, { type: "Dog", title: "Long Sellers", desc: "Low growth, low share. Revived via TNGA to become profitable niche assets (e.g., Land Cruiser)." }] },
+          global: { title: "Geographical Expansion Strategy", desc: "Matching global integration with local responsiveness.", regions: [{ name: "United States", strategy: "Transnational", desc: "Expanding EV/Battery plants (TBMNC) to meet local IRA rules while leveraging global TNGA efficiencies." }, { name: "China", strategy: "Multi-domestic", desc: "High localization (90% parts for bZ3X). JV with BYD to rapidly adapt to fierce smart-cabin and EV demands." }, { name: "Southeast Asia", strategy: "Global Strategy", desc: "Cost-sensitive market. Utilizing Thailand/Indonesia as export hubs for HEVs and commercial pickups." }, { name: "India", strategy: "Multi-domestic", desc: "Partnering with Suzuki to deliver high cost-performance vehicles suited for emerging infrastructure." }] },
+          roadmap: { title: "All-Solid-State Battery (ASSB) Commercialization Roadmap", desc: "Toyota's top management recently announced that the R&D of solid-state batteries is progressing smoothly. The group plans to launch mass-produced EVs equipped with ASSB as early as 2027. They also confirmed that high-performance models will be the first to feature this game-changing technology, aiming to deliver extreme performance and eliminate range anxiety.", milestones: [{ year: "2020 - 2023", title: "Patent Moat & Prototyping", desc: "Accumulating top global patents (over 1,000) through deep collaboration with Panasonic, and successfully road-testing prototypes to validate technical feasibility." }, { year: "2024 - 2026", title: "Manufacturing Breakthroughs", desc: "Focusing on overcoming the durability issues of solid electrolytes expanding/contracting during charging. Simultaneously scaling up the BEV Factory for next-gen battery production lines." }, { year: "2027 - 2028", title: "First Mass Production (High-Performance Models)", desc: "Top management confirmed smooth progress for a 2027 commercial launch. ASSB will debut on 'High-Performance Models' (e.g., Lexus/GR), targeting a disruptive 1,000km range and 10-minute fast charge." }, { year: "2030+", title: "Mass Scaling & Mainstream Adoption", desc: "Reducing manufacturing costs through massive economies of scale and trickling the technology down to mainstream models, supporting Toyota's goal of 3.5M BEV sales globally by 2030." }] },
+          challenges: { title: "Future Challenges & Strategic Solutions", items: [{ c: "BEV Transition Pressure (Lagging behind Tesla & BYD)", s: "Accelerate Solid-State batteries & dedicated BEV platforms." }, { c: "Software & AI Deficit (SDV Era)", s: "Expand Arene OS, shift to DCAP loops, and reskill 9,000 talents." }, { c: "China Market Price Wars & Tech Speed", s: "Deepen local R&D autonomy and JV partnerships in China." }, { c: "Battery 3R & ESG Compliance (Inertia & Agency Problem)", cDesc: "Implementing the 3R (Reduce, Reuse, Recycle) closed loop faces severe internal and network hurdles:\n1. Agency Problem: Franchised dealers and dismantlers (Agents) prioritize selling used batteries to lucrative third-party secondary markets for immediate profit, misaligning with Toyota HQ's (Principal) strategic goal of retaining critical minerals.\n2. Organizational Inertia: Toyota's historic success relies on a hyper-efficient 'forward' linear supply chain (TPS). Reconfiguring this into 'Reverse Logistics' involves high uncertainty, disrupts existing KPIs, and faces cultural resistance from legacy manufacturing divisions.", s: "Strategic Solutions:\n• For Agency Problem: Shift to a 'Battery-as-a-Service' (BaaS) leasing model to retain absolute ownership of batteries, paired with Blockchain 'Battery Passports' to eliminate information asymmetry.\n• For Organizational Inertia: Establish an independent 'Circular Economy Task Force' driven by top management with distinct green KPIs, bypassing traditional departmental inertia to fully realize the 3R ecosystem." }] }
+        },
+        conclusionTitle: "TP Final: Conclusion",
+        conclusionText: "This report summarizes our research on Toyota's electrification transition, global production network expansion (e.g., model adjustments under US-Japan trade agreements), and supply chain integration (especially investments in key battery technologies). By flexibly utilizing Business Units (BU), Functional Units (FU), and Geographical Units (GU), Toyota maintains agility in the global market and adopts a multi-pathway approach. Toyota's strategic posture demonstrates that a successful energy transition is not about making a single bet, but maintaining strategic flexibility. By balancing the profitability of its robust Hybrid (HEV) business with intense R&D in solid-state batteries and Arene OS, Toyota is uniquely positioned to remain resilient amidst temporary market volatility. Looking ahead, despite industry transitions and intensifying competition, Toyota leverages its exceptional economies of scale, deep technological accumulation, and proactive vertical integration to solidify its industry leadership and lay a solid foundation for the future mobility ecosystem. This report is not merely a summary of Toyota's corporate strategy, but a valuable insight gained through our team's collaboration and AI-assisted analysis in the field of international business management.",
+        team: { title: "Team, Reflection & D-ID Intros", introSub: "Meet our members and click the covers to play our 2nd version D-ID individual video presentations.", collaborationTitle: "Collaboration & AI Disclosure", collaboration: "Collaboration Process: Every Tuesday at 10:00 PM, we gathered data in advance. During our meetings, we synthesized and discussed the findings, then input the content into NotebookLM to enhance our discussion efficiency. Following this, we conducted group discussions on the framework, ensuring everyone clearly understood the report's content before proceeding to further discuss and create the document and webpage content individually. Finally, we held a final content synthesis and review session on Sunday at 10:00 PM, simulating the presentation flow.", ai: "AI Applications: Used Claude and ChatGPT for writing assistance, NotebookLM for data organization, and Gemini for webpage design generation." },
+        appendicesTitle: "Appendices",
+        lab: { title: "Appendix 1: Interactive Lab", desc: "Select a powertrain to analyze Toyota's real-world sales data, BCG positioning, and strategic metrics." },
+        labData: {
+          ice: { name: "ICE", role: "Stable Revenue", details: "53.1% of sales. Optimizing thermal efficiency and exploring e-fuels to extend product lifespan.", mechanism: "Internal Combustion Engine", bcg: "Decline / Dog", target: "Emerging Markets", stats: { share: 53.1, profit: 85, eco: 20, future: 10 }, colorTheme: "gray" },
+          hev: { name: "HEV", role: "Super Cash Cow", details: "40.2% of sales. The core profit engine funding the multi-pathway transition with unrivaled reliability.", mechanism: "Gas Engine + Electric Motor", bcg: "Maturity / Cash Cow", target: "Global Mass Market", stats: { share: 40.2, profit: 95, eco: 50, future: 40 }, colorTheme: "yellow" },
+          phev: { name: "PHEV", role: "Bridge Tech", details: "1.7% of sales. Offers EV benefits for daily use with ICE range for long trips.", mechanism: "Plug-in Battery + Engine", bcg: "Growth / Cash Cow", target: "Transitioning Consumers", stats: { share: 1.7, profit: 65, eco: 70, future: 50 }, colorTheme: "purple" },
+          bev: { name: "BEV", role: "Future Core", details: "1.8% of sales. Targeting 3.5M units by 2030. Developing solid-state batteries (1000km range, 10-min charge).", mechanism: "High-Capacity Battery + Motor", bcg: "Growth / Question Mark", target: "Regulated Mature Markets", stats: { share: 1.8, profit: 20, eco: 95, future: 100 }, colorTheme: "blue" },
+          fcev: { name: "FCEV", role: "Ultimate Zero-Carbon", details: "0.0% of sales. Emits only water. Focused on commercial logistics (trucks/buses) and infrastructure (Woven City).", mechanism: "Hydrogen Fuel Cell", bcg: "Introduction / Question Mark", target: "Commercial & Government", stats: { share: 0, profit: 5, eco: 100, future: 90 }, colorTheme: "cyan" }
+        },
+        sourcesTitle: "Appendix 2: Data Sources & References",
+        sources: [
+          { text: "Toyota Motor Corporation. (2025). Integrated Report 2025.", url: "https://global.toyota/en/ir/library/annual/", theory: "[Applied Theory: Dynamic Capabilities (Teece et al., 1997) & Value Chain Analysis]" },
+          { text: "Toyota Motor Corporation. (2024). FY2024 Financial Results.", url: "https://global.toyota/en/ir/financial-results/", theory: "[Applied Theory: BCG Matrix (Henderson, 1970) for Product Portfolio Analysis]" },
+          { text: "OICA (International Organization of Motor Vehicle Manufacturers). (2024). Global Automotive Production Statistics.", url: "https://www.oica.net/", theory: "[Applied Theory: Porter's Five Forces (Porter, 1979) & Industry Life Cycle]" },
+          { text: "Porter, M. E. (1980). Competitive Strategy: Techniques for Analyzing Industries and Competitors. Free Press.", url: "https://www.simonandschuster.com/", theory: "[Academic Theory Citation: Core foundation for 4P Strategy and Competitive Positioning]" },
+          { text: "NCNU Group 6 Internal Working Document (TP0 - Overview).", url: "https://docs.google.com/document/d/1twHgaNHBpLT76PgB5Wb3PtzmdQOVB6VDfLInFFcPgCQ/edit?tab=t.0", theory: "[Internal Data: Team Analysis & Synthesis]" },
+          { text: "NCNU Group 6 Internal Working Document (TP1 - External Environment).", url: "https://docs.google.com/document/d/186sg_sVKbUeNo-ZziDI8NlU76l1VBblqR3AAgsJXSeM/edit?tab=t.0", theory: "[Internal Data: Team Analysis & Synthesis]" },
+          { text: "NCNU Group 6 Internal Working Document (TP2 - Internal Resources).", url: "https://docs.google.com/document/d/18GcQXEUapGX-NwBxRf72UJY6QY-mdlBc-KWLvteig-I/edit?tab=t.0", theory: "[Internal Data: Team Analysis & Synthesis]" },
+          { text: "NCNU Group 6 Internal Working Document (TP3 - Strategy & Challenges).", url: "https://docs.google.com/document/d/1DmgA65iNjJW5xHPe-oHivOB-JYdcQXshWt3THKdFcDk/edit?tab=t.0", theory: "[Internal Data: Team Analysis & Synthesis]" },
+          { text: "NCNU Group 6 Internal Working Document (Conclusion & Reflection).", url: "https://docs.google.com/document/d/1qJODpXdEUNR5ke-2SJOtBVnbCZI98RO8Czkm8g6o33I/edit?tab=t.0", theory: "[Internal Data: Team Analysis & Synthesis]" }
+        ],
+        glossaryTitle: "Glossary of Terms",
+        glossary: [
+          { term: "TPS", def: "Toyota Production System. A lean manufacturing system focused on eliminating waste (Muda) and continuous improvement (Kaizen)." },
+          { term: "SDV", def: "Software-Defined Vehicle. Vehicles where features and functions are primarily enabled through software, like smartphones." },
+          { term: "CASE", def: "Connected, Autonomous, Shared, Electric. The four mega-trends driving the future of the automotive industry." },
+          { term: "MaaS", def: "Mobility as a Service. The integration of various forms of transport services into a single mobility service accessible on demand." },
+          { term: "Keiretsu", def: "A set of companies with interlocking business relationships and shareholdings (e.g., Toyota, Denso, Aisin)." }
+        ],
+        footer: "Department of International Business Studies, National Chi Nan University - Group 6 | Strategic Management of Multinational Corporations-EMI | Instructor: Prof. Shihmin Lo"
+      },
+      zh: {
+        nav: { tp0: "簡介現況", tp1: "外部環境", tp2: "內部資源", tp3: "策略挑戰", conclusion: "總結", appendices: "附錄", team: "團隊" },
+        hero: { title: "豐田汽車策略分析", subtitle: "邁向全方位移動服務公司", summary: "綜合執行摘要" },
+        summaryText: "面對 CASE 革命與全球碳中和目標，Toyota 正從傳統汽車製造商轉型為「移動服務公司」。透過「多樣化能源路徑策略」與TPS（豐田生產方式），在維持獲利能力的同時，積極投資未來創新與軟體定義汽車(SDV)。",
+        tp0: { 
+          title: "公司簡介與現況", 
+          cards: [
+            { id: 'vision', icon: 'target', title: '願景與使命', summary: '製造地球上最好的產品，提供安全、永續且包容的移動解決方案。', details: ['轉型為「移動服務公司」(Mobility Company)', '發展自動駕駛與軟體定義車 (SDV)', '目標2050年達成碳中和', '透過 Woven City 打造永續社會'] },
+            { id: 'history', icon: 'clock', title: '發展歷程', summary: '從紡織業轉型為全球汽車業領導者。', details: ['1937：公司成立 (從紡織轉向汽車製造)', '1950：經營危機 (裁員+重組壓低損益平衡點)', '1966：推出 Corolla (全球爆紅關鍵)', '1997：推出 Prius (全球第一款量產油電車)', '2015後：全面轉型佈局電動車與氫能'] },
+            { id: 'news', icon: 'newspaper', title: '近期重大動態', summary: '美國廠投資擴建與產品策略調整。', details: ['2026年4月起，在日本正式銷售美國廠製造的 Tundra 與 Highlander，滿足戶外需求並改善貿易平衡。', '投資 10 億美元升級美國產線 (肯塔基州與印第安納州)，整備純電動車與休旅車產能。'] },
+            { id: 'org', icon: 'network', title: '組織結構與經營團隊', summary: '混合型組織結構與 2026 高層改組。', details: ['採用混合型組織 (職能部門 + 地理劃分 + 專案創新單元)。', '佐藤恆治：2026年4月轉任副會長兼新設之首席產業長。', '近建太：由營運長升任為社長暨執行長，帶領組織轉型與提升獲利。'] },
+            { id: 'values', icon: 'award', title: '核心價值 (The Toyota Way)', summary: '驅動豐田全球營運的核心企業文化。', details: ['Respect for People (尊重員工與利害關係人)', 'Kaizen (持續優化、消除浪費)', 'Customer First (顧客至上與重視安全)', 'Genchi Genbutsu (現地現物，以事實做決策)'] }
+          ],
+          portfolio: "產品組合營收佔比 (2023)",
+          portfolioData: [
+            { name: "傳統燃油車 (ICE)", val: 53.1, color: "bg-gray-500" },
+            { name: "油電混合車 (HEV)", val: 40.2, color: "bg-green-500" },
+            { name: "插電式混合車 (PHEV)", val: 1.7, color: "bg-blue-400" },
+            { name: "純電動車 (BEV)", val: 1.8, color: "bg-blue-600" },
+            { name: "氫燃料電池車 (FCEV)", val: 0.0, color: "bg-cyan-400" }
+          ]
+        },
+        tp1: { 
+          title: "外部與產業環境分析", 
+          forcesTitle: "波特五力分析 (集團與產業視野)", 
+          pestelTitle: "PESTEL 總體環境趨勢",
+          compTitle: "競爭者矩陣分析",
+          lifeCycleTitle: "產業生命週期階段",
+          otrTitle: "外部機會、威脅與 4P 競爭策略",
+          forcesData: [
+            { name: "現有競爭者威脅 (極高)", score: 95, desc: "市場高度集中(CR5約50%)，面臨極端價格戰與產品生命週期縮短。" },
+            { name: "潛在進入者威脅 (高)", score: 85, desc: "SDV降低造車門檻，小米、華為等科技巨頭挾強大軟體生態系跨界造車。" },
+            { name: "購買者議價能力 (中高)", score: 75, desc: "資訊極度透明，消費者偏好轉向重視性價比與高算力智慧化體驗。" },
+            { name: "替代品威脅 (中)", score: 50, desc: "共享出行(Robotaxi)與微型出行在都會區部分取代了購車需求。" },
+            { name: "供應商議價能力 (中低)", score: 40, desc: "Toyota 擁有強大 Keiretsu 體系，但電池與AI晶片商(如Nvidia)話語權正上升。" }
+          ],
+          pestelData: [
+            { title: "政治 (Political)", desc: "全球主要市場加速推動禁售燃油車與嚴格碳稅標準，政策成為改變產業的驅動力。" },
+            { title: "經濟 (Economic)", desc: "電動化重塑成本結構，面臨電池原料價格波動與產線轉型的極高資本支出 (CAPEX)。" },
+            { title: "科技 (Technological)", desc: "SDV(軟體定義汽車)典範轉移。多路徑策略面臨資源分散風險，但能降低單一技術失敗風險。" }
+          ],
+          compData: [
+            { name: "VW Group", market: "高", resource: "高", threat: "最高 (全球範圍全面競爭)", color: "border-red-500", text: "text-red-600 dark:text-red-400" },
+            { name: "Hyundai-Kia", market: "高", resource: "中高", threat: "高 (EV技術與銷量快速追趕)", color: "border-purple-500", text: "text-purple-600 dark:text-purple-400" },
+            { name: "BYD", market: "中→高", resource: "中", threat: "高且上升中 (新能源成本與垂直整合優勢)", color: "border-orange-500", text: "text-orange-600 dark:text-orange-400" },
+            { name: "Tesla", market: "中 (EV為主)", resource: "低", threat: "中 (軟體定義車與AI技術破壞)", color: "border-blue-500", text: "text-blue-600 dark:text-blue-400" }
+          ],
+          chartLabels: { yAxis: "市場滲透 (Market Penetration)", xAxis: "時間 (Time)", intro: "INTRODUCTION", launch: "LAUNCH", maturity: "MATURITY", decline: "DECLINE" },
+          lifeCycleData: [
+            { phase: "導入期 (Introduction)", item: "軟體定義汽車 (SDV) 與智慧城市", dotLabel: "導入期 (INTRODUCTION)", color: "border-blue-500", dotColor: "bg-blue-500", textColor: "text-blue-300", pos: "left-[15%] bottom-[15%]", desc: "目前處於大量投入研發資金階段，作為未來移動社會的測試平台 (如 Woven City)。尚未產生顯著利潤，旨在為長期的生態系競爭力奠基。" },
+            { phase: "成長期 (Growth)", item: "純電動車 (BEV)", dotLabel: "成長期至洗牌期 (GROWTH / SHAKEOUT)", color: "border-green-500", dotColor: "bg-green-400", textColor: "text-green-300", pos: "left-[45%] bottom-[40%]", desc: "正處於市佔率急遽擴張階段。豐田已加速佈局產能 (目標2026年達150萬台、2030年350萬台)，面臨與 Tesla、BYD 等品牌的激烈市場競爭。" },
+            { phase: "成熟期 (Maturity)", item: "混合動力車 (HEV)", dotLabel: "成熟期 (MATURITY)", color: "border-yellow-500", dotColor: "bg-yellow-400", textColor: "text-yellow-300", pos: "left-[70%] bottom-[65%]", desc: "集團目前的「超級現金牛 (Cash Cow)」。銷量佔比極高 (佔比 40.2%)，貢獻了最穩定的現金流與高利潤率，是目前支撐龐大轉型研發支出的主要動力。" },
+            { phase: "衰退期 (Decline)", item: "傳統純燃油車 (ICE)", dotLabel: "衰退期 (DECLINE)", color: "border-pink-500", dotColor: "bg-pink-400", textColor: "text-pink-300", pos: "left-[88%] bottom-[80%]", desc: "受到全球碳中和願景與各國禁售法規影響，長遠戰略將逐步縮減其比例。目前雖能滿足新興市場需求，但整體市場規模已進入不可逆的縮減階段。" }
+          ],
+          cards: [
+            { id: 'opp', icon: 'target', title: '外部機會 (Opportunities)', summary: '轉型移動出行公司與 CASE 革命', details: ['CASE革命與SDV：透過 Woven by Toyota 打造專屬軟體平台，定位未來為「移動服務生態系」。', '多樣化能源路徑：不依賴單一技術，靈活佈局 HEV/BEV/FCEV，預計 2027 推動全固態電池商業化。', '社會系統整合：以 Woven City 作為實驗場域，測試自動駕駛與AI。', '數位轉型 (DX)：透過 TNGA 與雙向數位孿生技術 (Digital Twin)，同時達成降本增效 (研發降25%)。'] },
+            { id: 'threat', icon: 'alert-triangle', title: '外部威脅與經營風險 (Threats & Risks)', summary: '跨界競爭、法規壓力與供應鏈波動', details: ['新競爭者跨界進入：造車門檻軟體化，科技巨頭(小米、華為)挾帶強大軟硬生態系競爭。', '法規趨嚴：各國 ZEV (零排放車輛) 法規與碳稅政策趨嚴，大幅提升合規成本。', '供應鏈與市場風險：高度依賴全球供應鏈(電池材料、半導體)；成熟市場人口老化導致需求下降。', '資安與人才招募：SDV 時代帶來駭客網安威脅，且極需招募 AI 與軟體工程人才。'] },
+            { id: '4p', icon: 'briefcase', title: '4P 競爭策略總結 (Competitive Strategy)', summary: 'Position, Priority, Posture, Profit', details: ['Position (定位)：從傳統製造商轉變為「全方位移動解決方案提供者」與「社會系統整合者」。', 'Priority (優先行動)：加速電動化(目標2030年BEV銷350萬輛)、強化 Arene OS 平台，嚴控電池/半導體供應鏈。', 'Posture (競爭態勢)：堅持多路徑策略分散風險；推動開放式創新(如結盟SoftBank、Uber)。', 'Profit (獲利潛力)：以 HEV 龐大現金流支撐轉型；發展 MaaS 訂閱制；以 DX 精實生產維持高營業利益率。'] }
+          ]
+        },
+        tp2: { 
+          title: "內部資源與核心能耐",
+          tabs: { org: "組織結構協同", valueChain: "價值鏈關鍵活動", vrin: "資源 SCA 評估 (VRIN)", core: "核心能耐與夥伴", dynamic: "動態能力轉型" },
+          org: { title: "BU / FU / GU 矩陣結構對齊", desc: "Toyota 採用並行的組織設計，以解決全球運營中「產品多元」、「市場差異」與「營運效率」的衝突。", items: [{ title: "地理市場別 (Geographical GU)", desc: "提升各區域市場的在地適應力。不同國家在法規與基礎設施上差異極大，GU 能在標準化架構下靈活配置產品（如中國 bZ3X 達成 90% 零組件在地化）。" }, { title: "事業單位 (Business BU)", desc: "支撐多路徑技術（HEV/PHEV/BEV/FCEV）專業化分工，並分散單一路線轉型失敗的戰略風險，確保產品多元競爭力。" }, { title: "功能部門 (Functional FU)", desc: "統一全球研發、生產與採購技術平台，維持大規模經濟優勢，避免事業單位（BU）與區域市場（GU）重疊造成資源浪費。" }] },
+          valueChain: {
+            title: "企業價值鏈與營收流映射", desc: "Toyota 的價值主張並非由單一活動創造，而是透過研發生產、供應鏈與通路服務等六大關鍵活動（KA1-KA6）高度連動，轉換為穩定的營收流（RS）。",
+            activities: [
+              { title: "KA1: TPS 精實生產", desc: "融合 JIT（及時生產）、Jidoka（自動化）與 Kaizen 文化，徹底消除浪費（Muda），降低成本並支撐可靠性承諾。" },
+              { title: "KA2: Keiretsu 系列全球供應鏈", desc: "與 Tier-1 協作（如 Denso、Aisin），落實關鍵電池礦產的負責任採購與 Scope 1/2/3 減碳，在 28 國在地採購分散風險。" },
+              { title: "KA3: R&D 多動力技術研發", desc: "投入 ¥1.1 兆研發，利用雙向數位孿生技術（Digital Twins）驗證，並整合 BEV Factory 單一架構，實現新創般快速決策。" },
+              { title: "KA4: 品牌與全球經銷網路", desc: "貫徹「客戶第一、經銷商第二」原則。採取雙品牌策略（Toyota 大眾車 vs. Lexus 豪華車）精準覆蓋不同目標客群。" },
+              { title: "KA5: 金融服務 (TFS)", desc: "貢獻超 ¥3,000 億營業利益。透過購車融資降低門檻，結合 Arene OS OTA 訂閱服務，建立持續性客戶關係（CR）。" },
+              { title: "KA6: 售後服務與循環經濟", desc: "提供 SAWA 延長保固，更透過電池 3R（減量、重組、回收）技術閉合價值鏈，將線性製造轉化為閉環綠色生態系。" }
+            ],
+            revenueStream: { title: "營收流 (Revenue Streams) 連動對應表", headers: ["營收項目 (RS)", "佔比", "對應關鍵活動 (KA)", "傳遞通路 (CH) 與目標客群 (TA)"], rows: [["車輛銷售 (Vehicle Sales)", "~90%", "KA1、KA2、KA3、KA4", "全球授權經銷商網路 (CH1)。滿足一般消費者、企業車隊及政府機構。"], ["金融服務 (Financial Services)", "~8%", "KA5 (TFS)", "TFS 直接融資、經銷商合約 (CH2)。服務購車個人與企業長期租賃。"], ["零件與售後服務 (Parts & Others)", "~2%", "KA6", "售後原廠服務網路、HOTAI 購電商。延長顧客終身價值 (CLV)。"]] }
+          },
+          vrin: { title: "資源與可持續競爭優勢 (SCA) 評估", desc: "對照豐田的關鍵資源 (KR)，檢驗其在 CASE 轉型時代所具備的 VRIN 特質強度。", items: [{ title: "全固態電池專利技術", v: "是 (續航 1000km / 10分鐘快充)", r: "是 (全球極少數車廠具備研發能耐)", i: "極難模仿 (1990年代起累積大量專利，與 Panasonic 深度綁定)", n: "是 (短期內無其他高能量密度技術可替代)", s: "可持續競爭優勢 (SCA)" }, { title: "多路徑電動化策略", v: "是 (HEV/PHEV/BEV/FCEV 降低碳排)", r: "是 (多數對手如 Tesla 僅單一純電)", i: "難以模仿 (擁有 Prius 累積之電控與動力專利護城河)", n: "是 (因應全球不同基礎設施與電網限制)", s: "可持續競爭優勢 (SCA)" }, { title: "全球製造與在地供應鏈", v: "是 (降低成本、符合各國在地組裝要求)", r: "是 (具備此等規模且高度在地化者有限)", i: "難以模仿 (長年建立的跨國運營及供應商相互持股關係)", n: "是 (面臨地緣政治風險時幾乎不可替代)", s: "暫時至持續競爭優勢 (SCA)" }, { title: "自研 Arene OS 與軟硬分離", v: "是 (車輛如手機般持續 OTA 升級)", r: "是 (車廠自主軟體開發平台極稀缺)", i: "難以模仿 (結合 NVIDIA AI 運算，開發高度複雜)", n: "是 (智慧車輛體驗的核心，不可替代)", s: "持續夥伴/技術競爭優勢 (SCA)" }] },
+          core: { title: "核心能耐與互補性資產 (關鍵夥伴 KP)", desc: "Toyota 運用無比強大的製造 DNA (核心能耐)，並結合全球科技巨頭的互補性資產，打造牢固的技術護城河。", competencies: [{ title: "TPS生產方式與 Kaizen 文化", desc: "「現地現物」與自下而上的持續改善，讓一線員工主動消除浪費，在確保無敵妥善率的同時兼具極高生產彈性。" }, { title: "全球領先的 Hybrid 引擎專利", desc: "累積全球 2,700 萬輛的實戰電控數據，HEV 成本已降至最初的 1/6，獲利等同燃油車，是投資未來的龐大金庫。" }, { title: "匠人精神 (Craftsmanship) 與數位技術", desc: "將 Takumi 職人手藝與 3D 數位孿生技術融合，使開發工時減半，並在智慧工廠中實現極致的製造精準度。" }], partners: [{ name: "電池夥伴 【Panasonic】", desc: "合資成立 PPES 公司，共同研發汽車用棱柱型鋰電池與次世代全固態電池。透過 Toyota 的車輛數據與 Panasonic 的製程優勢，確保 BEV 產能擴張時的電池供應與安全性。" }, { name: "運算硬體夥伴 【NVIDIA】", desc: "導入 GPU 與 AI 計算平台，採用「硬體在迴路」(Hardware-in-the-Loop) 模擬測試，將 TRI-AD 的自動駕駛演算法與 NVIDIA 模擬系統完美整合，加速自駕落地。" }, { name: "通訊基礎設施夥伴 【NTT】", desc: "在 Woven City 共同建設「Smart City Platform」智慧城市平台。將車輛、人、5G/6G 通訊網、智慧住宅與綠氫能源管理深度串聯，打造永續的智慧社會生態系。" }] },
+          dynamic: { title: "動態能力 (Dynamic Capabilities) 轉型", desc: "探討 Toyota 近 3-5 年如何打破既有「常規」 (Routines)，展現對高度不確定未來市場的調適力。", items: [{ title: "組織矩陣重組與權力下放", desc: "廢除傳統職能分工，改以產品（Lexus, GR）與地理區域為核心，並成立「BEV Factory」與「Hydrogen Factory」專責單位，研發生產與經營一條鞭，消除部門壁壘。" }, { title: "生產與研發常規數位轉型", desc: "推動「軟硬體分離」，透過 Arene OS 硬體抽象層（HAL）實現軟體重用；導入 OMUSVI 系統統一全球車輛規格語言，消除人工數據轉換，加速營運流程。" }, { title: "PDCA 轉向 DCAP 學習循環", desc: "將傳統 PDCA 改為「Do-Check-Adjust-Plan」，在未知軟體領域快速行動（Do）並迅速調整（Adjust）。2025 年前完成 9,000 人規模的軟體培訓與人才 Reskilling。" }, { title: "Home & Away 戰略資產整合", desc: "專注主場（Home：製造、TPS、油電與氫能），將非專長（Away）與夥伴結盟分擔成本（Subaru, Suzuki, Mazda）。同時評估並減持戰略持股，變現資金集中投入自駕與 MaaS 藍海。" }] }
+        },
+        tp3: { 
+          title: "集團成長策略與未來挑戰", 
+          tabs: { integration: "垂直整合與進入模式", bcg: "BCG 矩陣與規模經濟", global: "全球化地理擴張", roadmap: "固態電池時間線", challenges: "未來挑戰與戰略建議", outlook: "未來展望" },
+          integration: { title: "產業價值鏈整合與進入模式 (Entry Modes)", desc: "Toyota 同步往上游核心技術與下游移動服務進行深度垂直整合 (VI)，並依風險採取不同進入模式。", upstream: { title: "上游整合 (Upstream)", items: ["電池內部化：全資收購 PEVE (改名TOYOTA BATTERY)，並於美國綠地投資 TBMNC 北卡電池廠 (工廠總投資達 139 億美元，呼應其百億美元的美國五年投資計畫)。", "半導體自研：投入 8吋 SiC 晶圓自研，目標降低 BEV 逆變器 50% 電力損耗。", "軟體平台：透過 Woven by Toyota 內部化 Arene OS，實現軟硬體解耦。"] }, downstream: { title: "下游整合 (Downstream)", items: ["MaaS 與訂閱：擴展 KINTO 訂閱服務與 MSPF 移動服務平台。", "社會系統整合：Woven City 智慧城市實驗場域 (物流、氫能、AI)。", "循環經濟：建立全球電池 3R (減量、重組、回收) 閉環生態系統。"] }, modes: [{ mode: "Greenfield (綠地投資)", desc: "美國 TBMNC 電池廠。動機：技術越成熟、資產專屬性高且需符合 IRA 補貼法規。" }, { mode: "Joint Venture (合資)", desc: "與 Panasonic (PPES 電池) 及 BYD (中國純電) 合資。動機：分擔高額風險並獲取互補資源。" }, { mode: "M&A (併購)", desc: "全資收購 Daihatsu (小車) 及 Lyft L5 自動駕駛部門。動機：快速獲取稀缺的軟體技術與人才。" }, { mode: "Strategic Alliance (聯盟)", desc: "與 Subaru, Mazda, Suzuki 交叉持股。動機：分擔 CASE 領域龐大開發成本 (Home & Away 策略)。" }] },
+          bcg: { title: "BCG 矩陣與綜效 (Synergy)", desc: "建構「自我循環的增長體系」，利用金牛收益支撐未來科技問號。", synergy: "經濟綜效：供給面透過 TNGA 達成「範疇與規模經濟」；需求面透過 1.5 億台保有車輛創造極強的「網絡效應 (Network Effect)」支撐 MaaS 發展。", matrix: [{ type: "明星 (Stars)", title: "TNGA 核心車系 & Lexus", desc: "高成長 / 高市佔。透過 TNGA 平台共用，開發工時降 25%，帶動集團強大獲利與純電轉型先鋒。" }, { type: "問號 (Question Marks)", title: "BEV, FCEV, 軟體 SDV", desc: "高成長 / 低市佔。高度不確定，需極大規模 R&D 投資 (由 HEV 金牛支撐)，為決定未來的關鍵。" }, { type: "金牛 (Cash Cows)", title: "HEV 油電 & 價值鏈業務", desc: "低成長 / 高市佔。無敵的妥善率與 1.5 億保有量。價值鏈(零件/金融)每年貢獻約 2兆日圓淨利。" }, { type: "老狗 (Dogs)", title: "長青車款 (Long Sellers)", desc: "低成長 / 低市佔。Toyota 將資源重組，利用 TNGA 賦予 Land Cruiser 等老車新生命，轉為利基獲利產品。" }] },
+          global: { title: "全球化地理擴張 (Geographical Expansion)", desc: "Toyota 依據各國地緣政治與基礎設施，採取不同的跨國化策略矩陣。", regions: [{ name: "美國市場 (United States)", strategy: "跨國型策略 (Transnational)", desc: "兼顧全球效率與在地回應。投入百億美元擴建 TBMNC 電池廠與產線，以符合在地製造 (IRA法案) 並滿足大型 SUV 需求。" }, { name: "中國市場 (China)", strategy: "多國型策略 (Multi-domestic)", desc: "極高的在地化需求。透過與 BYD 合資，並成立 Lexus 上海純電研發中心，bZ3X 達成 90% 零組件在地化以應對激烈價格戰。" }, { name: "東南亞市場 (Southeast Asia)", strategy: "全球型策略 (Global)", desc: "成本極度敏感。以泰國、印尼為核心出口樞紐，大規模導入 TNGA 平台製造 HEV 與皮卡，強調規模經濟與低成本優勢。" }, { name: "印度市場 (India)", strategy: "多國型策略 (Multi-domestic)", desc: "高成長新興市場。與 Suzuki 進行策略聯盟，開發符合當地價格結構與道路環境的高性價比特化車型。" }] },
+          roadmap: { title: "全固態電池 (ASSB) 商業化時間線", desc: "針對純電轉型的進度，Toyota 高層日前對外正式表示：固態電池的研發進展十分順利。集團將按照既定計畫，最快於 2027 年將其正式應用在量產電動車上，並確認將由「高性能車款」率先搭載固態電池，以極致的動力性能與顛覆性的續航力震撼市場。", milestones: [{ year: "2020 - 2023", title: "技術積累與原型測試", desc: "與 Panasonic 深度合作，累積全球最多的固態電池專利（逾千項），並成功在原型車上進行道路測試，確立技術可行性。" }, { year: "2024 - 2026", title: "製程突破與產線整備", desc: "專注克服固態電解質隨充放電膨脹降解的「耐久性」難題。同步擴建 BEV Factory 單一架構生產線，為新世代電池量產做準備。" }, { year: "2027 - 2028", title: "率先商用量產 (高性能車款)", desc: "高層確認進度順利，最快 2027 投入量產。首批將優先搭載於「高性能車款 (Premium/GR)」上，預期實現續航 1,000 公里、10 分鐘快充的破壞性創新。" }, { year: "2030 之後", title: "規模化與大眾市場普及", desc: "透過大量生產降低製造成本，將技術逐步下放至大眾車款。支撐 Toyota 達成 2030 年全球純電車 (BEV) 銷售 350 萬輛的戰略目標。" }] },
+          challenges: { title: "未來挑戰與戰略建議 (Challenges & Suggestions)", items: [{ c: "純電 (BEV) 轉型壓力加劇", cDesc: "純電車佈局進度落後於 Tesla 與 BYD，面臨市佔率被侵蝕與排放法規趨嚴的雙重壓力。", s: "加速全固態電池商業化 (目標2027)，並持續擴大 BEV Factory 單一架構開發效率。" }, { c: "軟體生態與 AI 演算法不足", cDesc: "傳統機械製造 DNA 難快速適應 SDV 時代，面臨科技巨頭 (如華為、小米) 跨界破壞。", s: "擴大 Arene OS 平台應用，落實 DCAP 敏捷開發循環，並於 2025 年前完成 9,000 名軟體人才 Reskilling。" }, { c: "中國市場價格戰與在地化競爭", cDesc: "中國本土品牌在智慧座艙與電池成本具備絕對優勢，導致 Toyota 在華市佔面臨衰退風險。", s: "深化中國本土 JV 合作 (如 BYD)，下放研發決策權，加速智駕功能在地化與成本優化。" }, { c: "電池 3R 閉環與 ESG 壓力 (組織慣性與代理問題)", cDesc: "面對減碳壓力與關鍵礦產掌握，推動電池 3R 面臨兩大阻力：\n1.【代理問題 (Agency Problem)】：經銷商或報廢廠 (代理人) 傾向將高價值的退役電池，直接轉售給利潤豐厚的第三方儲能市場以獲取短期利潤，這與豐田總部 (委託人) 期望回收關鍵礦產、達成封閉循環的長期戰略目標產生利益衝突 (Misalignment of Goals)。\n2.【組織慣性 (Organizational Inertia)】：Toyota 過去的巨大成功建立在極度優化的「單向線性供應鏈」上。要建立回收、檢測、再利用的「逆向物流 (Reverse Logistics)」，不僅會干擾既有追求單向高效率的 KPI，更會面臨習慣於傳統線性製造模式的部門文化抗拒。", s: "戰略解方：\n• 針對代理問題：應導入「電池即服務 (BaaS)」的租賃商業模式，讓豐田保留電池「絕對所有權」而非買斷給消費者，並結合區塊鏈「電池護照」消除資訊不對稱。\n• 針對組織慣性：由高層強勢介入，成立獨立的「循環經濟跨部門小組 (Task Force)」，制定專屬的綠色 KPI，以避開傳統部門的慣性阻力，徹底落實 3R 閉環生態系。" }] },
+          outlook: { title: "未來展望 (Future Outlook)", desc: "展望未來，儘管面對產業轉型與競爭加劇的挑戰，豐田憑藉其卓越的規模經濟、深厚的技術積累以及積極的垂直整合策略，持續鞏固其產業領導地位，並為未來移動生態系打下最堅實的基礎。" }
+        },
+        conclusionTitle: "TP 期末總結",
+        conclusionText: "本報告總結了對豐田在電動化轉型、全球生產網絡擴張（如：美日貿易協定下的車型調整）及供應鏈整合（特別是電池關鍵技術的投資）等方面的研究。豐田透過靈活運用事業單位 (BU)、功能部門 (FU) 與地理市場 (GU) 的組織設計，成功在全球市場中保持敏捷性，並在內燃機、油電混合與電動車之間採取多元發展路徑。Toyota 的策略展現了成功的能源轉型並非押注於單一技術，而是保持高度的戰略彈性。透過強大油電混合(HEV)金牛事業帶來的穩定獲利，來支持固態電池與 Arene OS 系統的龐大研發支出，Toyota 在面對市場短期波動時具有極高韌性。展望未來，儘管面對產業轉型與競爭加劇的挑戰，豐田憑藉其卓越的規模經濟、深厚的技術積累以及積極的垂直整合策略，持續鞏固其產業領導地位，並為未來移動生態系打下最堅實的基礎。這份報告不僅是對豐田企業策略的總結，更是我們團隊在國際企業管理領域中，透過協作與AI技術輔助分析所獲得的寶貴洞察。",
+        team: { title: "團隊協作、反思與 D-ID 影片", introSub: "歡迎觀看我們第六組成員的個人介紹，點擊封面圖即可直接播放修正後的第二版 D-ID 個人數位導覽影片。", collaborationTitle: "團隊協作與 AI 運用聲明", collaboration: "協作過程：我們固定在週二晚上10:00會先請大家找尋好資料，會議上統整並討論資料內容，並將內容丟到notebooklm，使其讓我們的討論效率提高。而後我們會進行架構的分組討論，並讓所有人明確了解此次的會議報告內容後各自再進一步討論並製作文件與網頁內容。最後我們會在週日的晚上10:00進行最後的內容統整及檢查，並模擬報告時會需要的流程。", ai: "AI 工作運用：用Claude, Chat GPT 進行撰文寫助， 利用 NotebookLM 進行資料整理，用 Gemini 進行網頁設計生成" },
+        appendicesTitle: "附錄 (Appendices)",
+        lab: { title: "附錄 1：互動實驗室 - 多元動力策略模擬器", desc: "點擊動力來源，分析 Toyota 真實的銷售數據、BCG 戰略定位與各項發展指標。" },
+        labData: {
+          ice: { name: "ICE (傳統燃油)", role: "穩健營收來源", details: "佔比 53.1%。透過優化熱效率與開發 e-fuels (碳中和燃料) 延長生命週期。", mechanism: "內燃機引擎", bcg: "衰退期 (Decline)", target: "基礎設施未成熟之新興市場", stats: { share: 53.1, profit: 85, eco: 20, future: 10 }, colorTheme: "gray" },
+          hev: { name: "HEV (油電混合)", role: "超級現金牛", details: "佔比 40.2%。集團獲利命脈，以極高利潤與成熟度支撐 BEV/FCEV 的龐大研發支出。", mechanism: "燃油引擎 + 電動馬達", bcg: "成熟期 (Maturity) / 金牛", target: "全球大眾市場 (無里程焦慮)", stats: { share: 40.2, profit: 95, eco: 50, future: 40 }, colorTheme: "yellow" },
+          phev: { name: "PHEV (插電混合)", role: "無縫過渡橋樑", details: "佔比 1.7%。兼具純電通勤與燃油長途優勢，降低消費者的電動車轉換門檻。", mechanism: "外部插電電池 + 引擎", bcg: "成長期 (Growth)", target: "具備家用充電條件之消費者", stats: { share: 1.7, profit: 65, eco: 70, future: 50 }, colorTheme: "purple" },
+          bev: { name: "BEV (純電動車)", role: "未來核心成長動能", details: "佔比 1.8%。目標2030年銷量達350萬輛。即將導入全固態電池 (續航1000km，充電10分鐘)。", mechanism: "高容量電池 + 電動馬達", bcg: "成長期 / 問號與明星", target: "法規嚴格之成熟市場 (歐美中)", stats: { share: 1.8, profit: 20, eco: 95, future: 100 }, colorTheme: "blue" },
+          fcev: { name: "FCEV (氫燃料車)", role: "終極零碳願景", details: "佔比近乎 0%。排放物僅有純水。主攻重型商用車(卡車/巴士)與 Woven City 智慧城市微電網。", mechanism: "氫燃料電池 + 電動馬達", bcg: "導入期 / 問號", target: "商用物流與政府基礎設施", stats: { share: 0, profit: 5, eco: 100, future: 90 }, colorTheme: "cyan" }
+        },
+        sourcesTitle: "附錄 2：資料與文獻來源 (Data Sources)",
+        sources: [
+          { text: "Toyota Motor Corporation. (2025). Integrated Report 2025 永續報告書.", url: "https://global.toyota/en/ir/library/annual/", theory: "【學術理論應用：動態能力理論 (Teece et al., 1997) 與企業價值鏈分析】" },
+          { text: "Toyota Motor Corporation. (2024). FY2024 財務與營運年報.", url: "https://global.toyota/en/ir/financial-results/", theory: "【學術理論應用：BCG 矩陣 (Henderson, 1970) 於集團產品組合分析】" },
+          { text: "OICA 國際汽車製造商協會. (2024). Global Automotive Production Statistics (全球汽車生產統計).", url: "https://www.oica.net/", theory: "【學術理論應用：波特五力分析 (Porter, 1979) 與產業生命週期階段評估】" },
+          { text: "Porter, M. E. (1980). Competitive Strategy: Techniques for Analyzing Industries and Competitors. Free Press.", url: "https://www.simonandschuster.com/", theory: "【學術理論引用：4P競爭策略與定位之核心學術文獻基礎】" },
+          { text: "國立暨南國際大學 第六組內部協作文件 (TP0 - 簡介與現況).", url: "https://docs.google.com/document/d/1twHgaNHBpLT76PgB5Wb3PtzmdQOVB6VDfLInFFcPgCQ/edit?tab=t.0", theory: "【內部資料：團隊分析與統整】" },
+          { text: "國立暨南國際大學 第六組內部協作文件 (TP1 - 外部環境分析).", url: "https://docs.google.com/document/d/186sg_sVKbUeNo-ZziDI8NlU76l1VBblqR3AAgsJXSeM/edit?tab=t.0", theory: "【內部資料：團隊分析與統整】" },
+          { text: "國立暨南國際大學 第六組內部協作文件 (TP2 - 內部資源分析).", url: "https://docs.google.com/document/d/18GcQXEUapGX-NwBxRf72UJY6QY-mdlBc-KWLvteig-I/edit?tab=t.0", theory: "【內部資料：團隊分析與統整】" },
+          { text: "國立暨南國際大學 第六組內部協作文件 (TP3 - 策略與挑戰).", url: "https://docs.google.com/document/d/1DmgA65iNjJW5xHPe-oHivOB-JYdcQXshWt3THKdFcDk/edit?tab=t.0", theory: "【內部資料：團隊分析與統整】" },
+          { text: "國立暨南國際大學 第六組內部協作文件 (總結與反思).", url: "https://docs.google.com/document/d/1qJODpXdEUNR5ke-2SJOtBVnbCZI98RO8Czkm8g6o33I/edit?tab=t.0", theory: "【內部資料：團隊分析與統整】" }
+        ],
+        glossaryTitle: "專有名詞解釋",
+        glossary: [
+          { term: "TPS (豐田生產方式)", def: "Toyota Production System。一種致力於徹底消除浪費(Muda)、追求效率與持續改善(Kaizen)的精實生產哲學。" },
+          { term: "SDV (軟體定義汽車)", def: "Software-Defined Vehicle。指車輛的核心功能與價值主要由軟體決定，並可透過 OTA 持續更新升級。" },
+          { term: "CASE", def: "互聯(Connected)、自動駕駛(Autonomous)、共享(Shared)、電動化(Electric)，為驅動汽車產業變革的四大趨勢。" },
+          { term: "MaaS (移動即服務)", def: "Mobility as a Service。將多種交通運輸服務整合為單一隨選移動服務的新型態商業模式。" },
+          { term: "Keiretsu (系列)", def: "日本特有的企業聯盟形式，企業間透過交叉持股與長期合作建立緊密的供應鏈關係 (如豐田、電裝、愛信)。" }
+        ],
+        footer: "國立暨南國際大學 國際企業學系 第六組 | 【跨國企業策略管理-全英語授課】 | 駱世民教授"
+      }
+    };
+
+    // --- State Variables ---
+    let currentLang = 'zh';
+    let isDarkTheme = false;
+    let isAudioPlaying = false;
+    let activeTp2Tab = 'org';
+    let activeTp3Tab = 'integration';
+    let activeLabTab = 'hev';
+
+    // --- DOM Elements ---
+    // Hero & Navbar
+    const langToggleBtn = document.getElementById('langToggle');
+    const langText = document.getElementById('langText');
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const audioBtn = document.getElementById('audioBtn');
+    const audioIcon = document.getElementById('audioIcon');
+    const glossaryBtn = document.getElementById('glossaryBtn');
+    const glossaryModal = document.getElementById('glossaryModal');
+    const glossaryOverlay = document.getElementById('glossaryOverlay');
+    const glossaryClose = document.getElementById('glossaryClose');
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    
+    // Setup initial DOM state based on dictionary
+    function renderApp() {
+      const t = content[currentLang];
+      
+      // Nav
+      document.querySelector('.nav-t-tp0').textContent = t.nav.tp0;
+      document.querySelector('.nav-t-tp1').textContent = t.nav.tp1;
+      document.querySelector('.nav-t-tp2').textContent = t.nav.tp2;
+      document.querySelector('.nav-t-tp3').textContent = t.nav.tp3;
+      document.querySelector('.nav-t-conclusion').textContent = t.nav.conclusion;
+      document.querySelector('.nav-t-appendices').textContent = t.nav.appendices;
+      document.querySelector('.nav-t-team').textContent = t.nav.team;
+
+      // Hero
+      document.getElementById('heroTitle').textContent = t.hero.title;
+      document.getElementById('heroSub').textContent = t.hero.subtitle;
+      document.getElementById('heroSumTitle').textContent = t.hero.summary;
+      document.getElementById('heroSumText').textContent = t.summaryText;
+
+      // TP0
+      document.getElementById('tp0Title').textContent = t.tp0.title;
+      document.getElementById('tp0PortTitle').textContent = t.tp0.portfolio;
+      const tp0CardsHtml = t.tp0.cards.map(c => `
+        <div class="p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer transition-all duration-300 hover:shadow-lg border-l-4 border-l-red-500 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750" onclick="this.querySelector('.expandable-content').classList.toggle('open'); this.querySelector('.chevron-icon').classList.toggle('open');">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+              <div class="p-2.5 bg-red-50 text-red-600 rounded-xl dark:bg-red-900/30 dark:text-red-400">
+                <i data-lucide="${c.icon}"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-lg">${c.title}</h4>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">${c.summary}</p>
+              </div>
+            </div>
+            <div class="text-gray-400 chevron-icon"><i data-lucide="chevron-down"></i></div>
+          </div>
+          <div class="expandable-content">
+            <div class="pt-4 border-t border-gray-100 dark:border-gray-700">
+              <ul class="space-y-2.5">
+                ${c.details.map(d => `<li class="flex items-start text-sm sm:text-base text-gray-700 dark:text-gray-300"><i data-lucide="chevron-right" class="w-4 h-4 mr-2 mt-1 flex-shrink-0 text-red-500"></i><span class="leading-relaxed">${d}</span></li>`).join('')}
+              </ul>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('tp0CardsContainer').innerHTML = tp0CardsHtml;
+
+      const tp0PortHtml = t.tp0.portfolioData.map(item => `
+        <div>
+          <div class="flex justify-between text-base font-medium mb-2"><span>${item.name}</span><span class="font-bold">${item.val}%</span></div>
+          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
+            <div class="${item.color} h-4 rounded-full transition-all duration-1000 ease-out relative" style="width: ${item.val}%">
+               <div class="absolute top-0 left-0 right-0 bottom-0 bg-white/20"></div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('tp0PortContainer').innerHTML = tp0PortHtml;
+
+      // TP1
+      document.getElementById('tp1Title').textContent = t.tp1.title;
+      document.getElementById('tp1ForcesTitle').innerHTML = `<i data-lucide="activity" class="mr-2 text-red-500"></i>${t.tp1.forcesTitle}`;
+      const tp1ForcesHtml = t.tp1.forcesData.map(f => `
+        <div>
+          <div class="flex justify-between text-sm font-bold mb-1"><span>${f.name}</span><span class="${f.score >= 80 ? 'text-red-500' : f.score >= 60 ? 'text-orange-500' : 'text-green-500'}">${f.score}/100</span></div>
+          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-1">
+            <div class="h-2 rounded-full ${f.score >= 80 ? 'bg-red-500' : f.score >= 60 ? 'bg-orange-500' : 'bg-green-500'}" style="width: ${f.score}%"></div>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-400">${f.desc}</p>
+        </div>
+      `).join('');
+      document.getElementById('tp1ForcesContainer').innerHTML = tp1ForcesHtml;
+
+      document.getElementById('tp1PestelTitle').innerHTML = `<i data-lucide="globe" class="mr-2 text-blue-500"></i>${t.tp1.pestelTitle}`;
+      const pestIcons = ['shield', 'trending-up', 'cpu'];
+      const pestColors = ['text-indigo-500', 'text-green-500', 'text-purple-500'];
+      const tp1PestelHtml = t.tp1.pestelData.map((p, i) => `
+        <div class="flex items-start">
+          <div class="p-2 rounded-lg mr-3 bg-blue-50 dark:bg-gray-700">
+            <i data-lucide="${pestIcons[i]}" class="w-5 h-5 ${pestColors[i]}"></i>
+          </div>
+          <div><h4 class="font-bold text-sm mb-1">${p.title}</h4><p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">${p.desc}</p></div>
+        </div>
+      `).join('');
+      document.getElementById('tp1PestelContainer').innerHTML = tp1PestelHtml;
+
+      document.getElementById('tp1CompTitle').innerHTML = `<i data-lucide="swords" class="mr-2 text-orange-500"></i>${t.tp1.compTitle}`;
+      const tp1CompHtml = t.tp1.compData.map(c => `
+        <div class="p-4 rounded-xl border-t-4 shadow-sm ${c.color} bg-gray-50 dark:bg-gray-750">
+          <h4 class="font-extrabold text-lg mb-2">${c.name}</h4>
+          <div class="text-xs space-y-1 mb-3 text-gray-600 dark:text-gray-300"><p>Market: <span class="font-bold">${c.market}</span></p><p>Resource: <span class="font-bold">${c.resource}</span></p></div>
+          <div class="text-xs font-bold px-2 py-1 rounded-md bg-white dark:bg-gray-800 ${c.text}">${c.threat}</div>
+        </div>
+      `).join('');
+      document.getElementById('tp1CompContainer').innerHTML = tp1CompHtml;
+
+      document.getElementById('tp1LifeTitle').innerHTML = `<i data-lucide="trending-down" class="mr-2 text-teal-500"></i>${t.tp1.lifeCycleTitle}`;
+      document.getElementById('tp1ChartLabels').innerHTML = `
+        <div class="flex-1 bg-[#0099cc] h-full flex items-center justify-center border-r border-white/20">${t.tp1.chartLabels.intro}</div>
+        <div class="flex-1 bg-[#f59e0b] h-full flex items-center justify-center border-r border-white/20">${t.tp1.chartLabels.launch}</div>
+        <div class="flex-1 bg-[#22c55e] h-full flex items-center justify-center border-r border-white/20">${t.tp1.chartLabels.maturity}</div>
+        <div class="flex-1 bg-[#1e3a8a] h-full flex items-center justify-center">${t.tp1.chartLabels.decline}</div>
+      `;
+      document.getElementById('tp1YAxis').textContent = t.tp1.chartLabels.yAxis;
+      document.getElementById('tp1XAxis').textContent = t.tp1.chartLabels.xAxis;
+      
+      const tp1ChartPointsHtml = t.tp1.lifeCycleData.map((d, i) => `
+        <div class="absolute ${d.pos} flex flex-col items-center -translate-x-1/2 translate-y-1/2 transition-transform hover:scale-110 cursor-pointer">
+          <div class="text-center mb-2.5 px-2">
+            <div class="text-[10px] sm:text-sm font-bold text-white drop-shadow-lg whitespace-nowrap">${d.item}</div>
+            <div class="text-[8px] sm:text-[10px] ${d.textColor} border ${d.color.replace('border-','border-')}/50 rounded-full px-2 py-0.5 mt-1 bg-black/40 whitespace-nowrap">${d.dotLabel}</div>
+          </div>
+          <div class="relative flex items-center justify-center">
+            ${i===0?`<div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full ${d.dotColor}/20 absolute animate-ping"></div><div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-${d.color.split('-')[1]}-500/50 absolute"></div>`:''}
+            <div class="w-3 h-3 sm:w-4 sm:h-4 rounded-full ${d.dotColor} z-10 shadow-[0_0_12px_rgba(255,255,255,0.3)]"></div>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('tp1ChartPoints').innerHTML = tp1ChartPointsHtml;
+
+      const tp1LifeCardsHtml = t.tp1.lifeCycleData.map(c => `
+        <div class="p-5 rounded-xl border bg-gray-50 border-gray-200 dark:bg-gray-750 dark:border-gray-700">
+          <div class="flex items-center mb-3"><span class="w-3 h-3 rounded-full mr-2 ${c.dotColor}"></span><h4 class="font-extrabold text-sm sm:text-base uppercase tracking-wider">${c.phase}</h4></div>
+          <h5 class="font-bold mb-2 ${c.textColor.replace('300','600').replace('400','600')}">${c.item}</h5>
+          <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">${c.desc}</p>
+        </div>
+      `).join('');
+      document.getElementById('tp1LifeCards').innerHTML = tp1LifeCardsHtml;
+
+      document.getElementById('tp1OtrTitle').textContent = t.tp1.otrTitle;
+      const tp1OtrHtml = t.tp1.cards.map(c => `
+        <div class="p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 cursor-pointer transition-all duration-300 hover:shadow-lg border-l-4 border-l-red-500 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750" onclick="this.querySelector('.expandable-content').classList.toggle('open'); this.querySelector('.chevron-icon').classList.toggle('open');">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+              <div class="p-2.5 bg-red-50 text-red-600 rounded-xl dark:bg-red-900/30 dark:text-red-400">
+                <i data-lucide="${c.icon}"></i>
+              </div>
+              <div><h4 class="font-bold text-lg">${c.title}</h4><p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">${c.summary}</p></div>
+            </div>
+            <div class="text-gray-400 chevron-icon"><i data-lucide="chevron-down"></i></div>
+          </div>
+          <div class="expandable-content">
+            <div class="pt-4 border-t border-gray-100 dark:border-gray-700">
+              <ul class="space-y-2.5">
+                ${c.details.map(d => `<li class="flex items-start text-sm sm:text-base text-gray-700 dark:text-gray-300"><i data-lucide="chevron-right" class="w-4 h-4 mr-2 mt-1 flex-shrink-0 text-red-500"></i><span class="leading-relaxed">${d}</span></li>`).join('')}
+              </ul>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('tp1OtrContainer').innerHTML = tp1OtrHtml;
+
+      // TP2
+      document.getElementById('tp2Title').textContent = t.tp2.title;
+      renderTp2Tabs(t);
+      renderTp2Content(t);
+
+      // TP3
+      document.getElementById('tp3Title').textContent = t.tp3.title;
+      renderTp3Tabs(t);
+      renderTp3Content(t);
+
+      // Conclusion
+      document.getElementById('conTitle').textContent = t.conclusionTitle;
+      document.getElementById('conText').textContent = t.conclusionText;
+
+      // Appendices (Lab)
+      document.getElementById('appTitle').textContent = t.appendicesTitle;
+      document.getElementById('labTitle').innerHTML = `<i data-lucide="zap" class="text-yellow-500"></i> ${t.lab.title}`;
+      document.getElementById('labDesc').textContent = t.lab.desc;
+      renderLab(t);
+
+      // Appendices (Sources)
+      document.getElementById('srcTitle').innerHTML = `<i data-lucide="link" class="text-blue-500 mr-2"></i> ${t.sourcesTitle}`;
+      const srcHtml = t.sources.map(s => `
+        <li class="flex flex-col sm:flex-row items-start text-sm sm:text-base p-4 rounded-xl border transition-colors shadow-sm border-gray-100 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-750">
+          <i data-lucide="external-link" class="mr-4 h-5 w-5 text-red-500 flex-shrink-0 mt-1"></i>
+          <div class="flex-1 text-gray-700 dark:text-gray-300 font-medium">
+            <span class="block mb-1">${s.text} Retrieved from <a href="${s.url}" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline break-all">${s.url}</a></span>
+            <span class="inline-block mt-1 text-xs px-2.5 py-1 bg-gray-200 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">${s.theory}</span>
+          </div>
+        </li>
+      `).join('');
+      document.getElementById('srcList').innerHTML = srcHtml;
+
+      // Team
+      document.getElementById('teamTitle').textContent = t.team.title;
+      document.getElementById('teamSub').textContent = t.team.introSub;
+      
+      const teamData = [
+        { name: 'Meggie 李采妤', id: '112212002', role: 'Data Synthesis', videoId: 'xaU8UG4nnac' },
+        { name: 'Corrine 江禹萱', id: '112212003', role: 'Data Synthesis', videoId: 'bQ9hYyXniEw' },
+        { name: 'Kimo 劉斯圓', id: '112212005', role: 'Strategy Framework', videoId: 'k3xS-_wFA48' },
+        { name: 'Cindy 游聿慈', id: '112212008', role: 'Strategy Framework', videoId: 'i-U2JccWZ4E' },
+        { name: 'Ruyi 許茹詒', id: '112212016', role: 'Interactive Design', videoId: 'Af_F1oG09wY' },
+        { name: 'Ann 劉子熏', id: '112212017', role: 'Interactive Design', videoId: 'pKHhM5sW5C0' },
+      ];
+
+      const teamHtml = teamData.map(m => `
+        <div class="p-5 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 flex flex-col justify-between transition hover:shadow-2xl bg-white dark:bg-gray-800">
+          <div>
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden border-2 border-red-500">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${m.name}" alt="Avatar" class="w-full h-full object-cover" />
+              </div>
+              <div>
+                <h4 class="font-bold text-lg leading-tight">${m.name}</h4>
+                <p class="text-xs text-gray-500 dark:text-gray-400">${m.id}</p>
+                <span class="inline-block mt-1 text-[10px] bg-red-100 text-red-800 px-2 py-0.5 rounded-full font-semibold dark:bg-red-900/60 dark:text-red-200">${m.role}</span>
+              </div>
+            </div>
+            <div class="relative w-full aspect-video rounded-xl overflow-hidden shadow-md cursor-pointer group border border-gray-200 dark:border-gray-750 bg-gray-100 dark:bg-gray-900 video-container" data-vid="${m.videoId}">
+              <img src="https://img.youtube.com/vi/${m.videoId}/hqdefault.jpg" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+              <div class="absolute inset-0 bg-black/30 flex items-center justify-center transition-colors duration-300 group-hover:bg-black/45">
+                <div class="p-4 rounded-full bg-red-600/95 text-white shadow-xl transition-all duration-300 transform group-hover:scale-110 flex items-center justify-center">
+                  <i data-lucide="play-circle" class="h-10 w-10 animate-pulse"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('teamMembers').innerHTML = teamHtml;
+      
+      // Bind video clicks
+      document.querySelectorAll('.video-container').forEach(el => {
+        el.addEventListener('click', function() {
+          const vid = this.getAttribute('data-vid');
+          this.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${vid}?autoplay=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+          this.classList.remove('cursor-pointer', 'group');
+        });
+      });
+
+      document.getElementById('collabTitle').innerHTML = `<i data-lucide="users" class="mr-2"></i> ${t.team.collaborationTitle}`;
+      document.getElementById('collabText').textContent = t.team.collaboration;
+      document.getElementById('aiText').textContent = t.team.ai;
+
+      // Footer
+      document.getElementById('footerText').textContent = t.footer;
+
+      // Glossary
+      document.getElementById('glTitle').innerHTML = `<i data-lucide="book-open" class="mr-2"></i>${t.glossaryTitle}`;
+      const glHtml = t.glossary.map(g => `
+        <div class="border-b border-gray-200 dark:border-gray-700 pb-4">
+          <h4 class="font-bold text-red-600 dark:text-red-400 mb-1">${g.term}</h4>
+          <p class="text-sm leading-relaxed">${g.def}</p>
+        </div>
+      `).join('');
+      document.getElementById('glItems').innerHTML = glHtml;
+
+      lucide.createIcons();
+    }
+
+    // --- TP2 Rendering ---
+    function renderTp2Tabs(t) {
+      const keys = Object.keys(t.tp2.tabs);
+      const icons = { org: 'network', valueChain: 'layers', vrin: 'key', core: 'puzzle', dynamic: 'refresh-cw' };
+      const html = keys.map(k => `
+        <button onclick="setTp2Tab('${k}')" class="tp2-btn px-4 py-2.5 rounded-lg font-bold text-sm sm:text-base transition-all duration-300 flex items-center gap-2 border ${activeTp2Tab === k ? 'bg-red-600 text-white border-red-600 shadow-md' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700'}" data-tab="${k}">
+          <i data-lucide="${icons[k]}" class="w-4 h-4"></i> ${t.tp2.tabs[k]}
+        </button>
+      `).join('');
+      document.getElementById('tp2TabsContainer').innerHTML = html;
+    }
+
+    function setTp2Tab(tab) {
+      activeTp2Tab = tab;
+      document.querySelectorAll('#tp2 .tab-content').forEach(el => el.classList.remove('active'));
+      document.getElementById(`tp2-${tab}`).classList.add('active');
+      renderTp2Tabs(content[currentLang]);
+      lucide.createIcons();
+    }
+
+    function renderTp2Content(t) {
+      // Org
+      document.getElementById('tp2OrgTitle').textContent = t.tp2.org.title;
+      document.getElementById('tp2OrgDesc').textContent = t.tp2.org.desc;
+      document.getElementById('tp2OrgItems').innerHTML = t.tp2.org.items.map(i => `<div class="p-6 rounded-2xl shadow-md border-l-4 border-l-red-500 bg-white dark:bg-gray-800 hover:shadow-xl transition-all"><h4 class="text-lg font-bold mb-3 text-red-600 dark:text-red-400">${i.title}</h4><p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">${i.desc}</p></div>`).join('');
+      
+      // Value Chain
+      document.getElementById('tp2VcTitle').textContent = t.tp2.valueChain.title;
+      document.getElementById('tp2VcDesc').textContent = t.tp2.valueChain.desc;
+      document.getElementById('tp2VcActs').innerHTML = t.tp2.valueChain.activities.map(a => `<div class="p-5 rounded-xl border shadow-sm flex flex-col justify-between bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700"><h4 class="font-bold text-lg text-red-500 dark:text-red-400 mb-2">${a.title}</h4><p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">${a.desc}</p></div>`).join('');
+      document.getElementById('tp2RsTitle').textContent = t.tp2.valueChain.revenueStream.title;
+      document.getElementById('tp2RsHeaders').innerHTML = t.tp2.valueChain.revenueStream.headers.map(h => `<th class="pb-3 px-4">${h}</th>`).join('');
+      document.getElementById('tp2RsRows').innerHTML = t.tp2.valueChain.revenueStream.rows.map(r => `<tr class="hover:bg-gray-50 dark:hover:bg-gray-750 text-sm sm:text-base"><td class="py-4 px-4 font-bold text-red-600 dark:text-red-400">${r[0]}</td><td class="py-4 px-4 font-semibold text-green-600 dark:text-green-400">${r[1]}</td><td class="py-4 px-4 font-medium">${r[2]}</td><td class="py-4 px-4 text-gray-600 dark:text-gray-300 leading-relaxed">${r[3]}</td></tr>`).join('');
+
+      // VRIN
+      document.getElementById('tp2VrinTitle').textContent = t.tp2.vrin.title;
+      document.getElementById('tp2VrinDesc').textContent = t.tp2.vrin.desc;
+      document.getElementById('tp2VrinItems').innerHTML = t.tp2.vrin.items.map(i => `<div class="p-6 rounded-2xl shadow-md border-l-4 border-l-indigo-500 flex flex-col justify-between bg-white dark:bg-gray-800"><div><h4 class="text-xl font-bold mb-3">${i.title}</h4><ul class="text-sm space-y-2 mb-4 text-gray-600 dark:text-gray-300"><li><span class="font-semibold text-indigo-500">Valuable:</span> ${i.v}</li><li><span class="font-semibold text-indigo-500">Rare:</span> ${i.r}</li><li><span class="font-semibold text-indigo-500">Inimitable:</span> ${i.i}</li><li><span class="font-semibold text-indigo-500">Non-substitutable:</span> ${i.n}</li></ul></div><div class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-center uppercase tracking-wider">${i.s}</div></div>`).join('');
+
+      // Core
+      document.getElementById('tp2CoreTitle').textContent = t.tp2.core.title;
+      document.getElementById('tp2CoreDesc').textContent = t.tp2.core.desc;
+      document.getElementById('tp2CoreComps').innerHTML = t.tp2.core.competencies.map(c => `<div class="p-6 rounded-2xl shadow-md border-t-4 border-t-red-600 bg-white dark:bg-gray-800"><h4 class="text-lg font-bold mb-3 flex items-center gap-2"><i data-lucide="award" class="text-red-500 w-5 h-5"></i>${c.title}</h4><p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">${c.desc}</p></div>`).join('');
+      document.getElementById('tp2KpItems').innerHTML = t.tp2.core.partners.map(p => `<div class="space-y-3"><div class="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-extrabold text-lg"><i data-lucide="users" class="w-5 h-5"></i><h5>${p.name}</h5></div><p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">${p.desc}</p></div>`).join('');
+
+      // Dynamic
+      document.getElementById('tp2DynTitle').textContent = t.tp2.dynamic.title;
+      document.getElementById('tp2DynDesc').textContent = t.tp2.dynamic.desc;
+      document.getElementById('tp2DynItems').innerHTML = t.tp2.dynamic.items.map(i => `<div class="p-6 rounded-2xl shadow-md border-l-4 border-l-green-500 flex items-start gap-4 transition hover:-translate-y-1 hover:shadow-lg bg-white dark:bg-gray-800"><div class="p-2 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-lg"><i data-lucide="refresh-cw" class="w-5 h-5 animate-spin-slow"></i></div><div><h4 class="text-lg font-bold mb-2 text-green-600 dark:text-green-400">${i.title}</h4><p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">${i.desc}</p></div></div>`).join('');
+    }
+
+    // --- TP3 Rendering ---
+    function renderTp3Tabs(t) {
+      const keys = Object.keys(t.tp3.tabs);
+      const icons = { integration: 'git-merge', bcg: 'pie-chart', global: 'map', roadmap: 'battery-charging', challenges: 'lightbulb', outlook: 'compass' };
+      const html = keys.map(k => `
+        <button onclick="setTp3Tab('${k}')" class="px-4 py-2.5 rounded-lg font-bold text-sm sm:text-base transition-all duration-300 flex items-center gap-2 border ${activeTp3Tab === k ? 'bg-red-600 text-white border-red-600 shadow-md' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700'}">
+          <i data-lucide="${icons[k]}" class="w-4 h-4"></i> ${t.tp3.tabs[k]}
+        </button>
+      `).join('');
+      document.getElementById('tp3TabsContainer').innerHTML = html;
+    }
+
+    function setTp3Tab(tab) {
+      activeTp3Tab = tab;
+      document.querySelectorAll('#tp3 .tab-content').forEach(el => el.classList.remove('active'));
+      document.getElementById(`tp3-${tab}`).classList.add('active');
+      renderTp3Tabs(content[currentLang]);
+      lucide.createIcons();
+    }
+
+    function renderTp3Content(t) {
+      // Integration
+      document.getElementById('tp3IntTitle').textContent = t.tp3.integration.title;
+      document.getElementById('tp3IntDesc').textContent = t.tp3.integration.desc;
+      document.getElementById('tp3UpTitle').innerHTML = `<i data-lucide="arrow-right" class="md:hidden"></i> ${t.tp3.integration.upstream.title}`;
+      document.getElementById('tp3UpItems').innerHTML = t.tp3.integration.upstream.items.map(i => `<li class="flex items-start bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl"><i data-lucide="database" class="w-5 h-5 text-blue-500 mr-3 flex-shrink-0 mt-0.5"></i><span class="text-sm sm:text-base leading-relaxed">${i}</span></li>`).join('');
+      document.getElementById('tp3DownTitle').innerHTML = `<i data-lucide="arrow-right" class="md:hidden"></i> ${t.tp3.integration.downstream.title}`;
+      document.getElementById('tp3DownItems').innerHTML = t.tp3.integration.downstream.items.map(i => `<li class="flex items-start bg-green-50 dark:bg-green-900/20 p-4 rounded-xl"><i data-lucide="activity" class="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5"></i><span class="text-sm sm:text-base leading-relaxed">${i}</span></li>`).join('');
+      document.getElementById('tp3Modes').innerHTML = t.tp3.integration.modes.map((m, i) => `<div class="p-5 rounded-xl border-l-4 shadow-sm transition hover:shadow-md bg-gray-50 dark:bg-gray-750 ${i===0?'border-l-green-500':i===1?'border-l-blue-500':i===2?'border-l-purple-500':'border-l-orange-500'}"><h5 class="font-extrabold text-lg mb-2">${m.mode}</h5><p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">${m.desc}</p></div>`).join('');
+
+      // BCG
+      document.getElementById('tp3BcgTitle').textContent = t.tp3.bcg.title;
+      document.getElementById('tp3BcgDesc').textContent = t.tp3.bcg.desc;
+      const bicons = ['star', 'help-circle', 'dollar-sign', 'box'];
+      const bgColors = ['from-yellow-400 to-yellow-600', 'from-blue-400 to-blue-600', 'from-green-400 to-green-600', 'from-gray-400 to-gray-600'];
+      document.getElementById('tp3BcgMatrix').innerHTML = t.tp3.bcg.matrix.map((m, i) => `
+        <div class="p-6 sm:p-8 rounded-2xl flex flex-col justify-center transition-transform hover:scale-[1.02] shadow-lg bg-gradient-to-br ${bgColors[i]} text-white">
+          <div class="flex items-center gap-2 mb-3"><i data-lucide="${bicons[i]}" class="w-7 h-7 drop-shadow-md"></i><h4 class="font-extrabold text-xl sm:text-2xl drop-shadow-md">${m.title}</h4></div>
+          <div class="bg-black/20 px-3 py-1 rounded-lg text-xs font-bold inline-block w-fit mb-3">${m.type}</div>
+          <p class="text-sm sm:text-base leading-relaxed drop-shadow-sm font-medium">${m.desc}</p>
+        </div>
+      `).join('');
+      document.getElementById('tp3BcgSyn').textContent = t.tp3.bcg.synergy;
+
+      // Global
+      document.getElementById('tp3GloTitle').textContent = t.tp3.global.title;
+      document.getElementById('tp3GloDesc').textContent = t.tp3.global.desc;
+      document.getElementById('tp3GloRegions').innerHTML = t.tp3.global.regions.map(r => `
+        <div class="p-6 rounded-3xl shadow-lg border border-gray-100 flex items-start gap-4 transition hover:-translate-y-1 hover:shadow-xl bg-white dark:bg-gray-800 dark:border-gray-700">
+          <div class="p-3 bg-red-100 text-red-600 rounded-2xl dark:bg-red-900/30 dark:text-red-400"><i data-lucide="globe" class="w-6 h-6"></i></div>
+          <div><h4 class="text-xl font-bold mb-1">${r.name}</h4><span class="inline-block text-xs font-extrabold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded-md mb-3 uppercase tracking-wider">${r.strategy}</span><p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">${r.desc}</p></div>
+        </div>
+      `).join('');
+
+      // Roadmap
+      if(t.tp3.roadmap) {
+        document.getElementById('tp3RoadTitle').textContent = t.tp3.roadmap.title;
+        document.getElementById('tp3RoadDesc').textContent = t.tp3.roadmap.desc;
+        document.getElementById('tp3RoadMs').innerHTML = t.tp3.roadmap.milestones.map((ms, idx) => `
+          <div class="flex flex-col sm:flex-row items-center justify-between w-full ${idx % 2 === 0 ? 'sm:flex-row-reverse' : ''}">
+            <div class="hidden sm:block sm:w-5/12"></div>
+            <div class="absolute left-8 sm:left-1/2 w-8 h-8 rounded-full bg-white dark:bg-gray-800 border-4 border-blue-500 shadow-md transform -translate-x-1/2 flex items-center justify-center z-10"><div class="w-2.5 h-2.5 rounded-full bg-blue-500"></div></div>
+            <div class="w-full sm:w-5/12 pl-16 sm:pl-0 ${idx % 2 === 0 ? 'sm:pr-12 sm:text-right' : 'sm:pl-12 sm:text-left'}">
+              <div class="p-6 rounded-2xl shadow-md border hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700">
+                <span class="inline-block px-4 py-1.5 rounded-full text-sm font-extrabold mb-4 shadow-sm ${idx === 2 ? 'bg-blue-600 text-white animate-pulse' : 'bg-blue-100 text-blue-700 dark:bg-gray-700 dark:text-blue-400'}">${ms.year}</span>
+                <h4 class="font-extrabold text-lg sm:text-xl mb-3 text-gray-800 dark:text-gray-100">${ms.title}</h4>
+                <p class="text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-relaxed">${ms.desc}</p>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Challenges
+      document.getElementById('tp3ChaTitle').textContent = t.tp3.challenges.title;
+      document.getElementById('tp3ChaItems').innerHTML = t.tp3.challenges.items.map(c => `
+        <div class="rounded-3xl shadow-lg overflow-hidden flex flex-col border bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700">
+          <div class="p-6 border-b border-gray-100 dark:border-gray-700 bg-red-50/50 dark:bg-red-900/10">
+            <div class="flex items-center gap-2 text-red-600 dark:text-red-400 mb-2"><i data-lucide="alert-triangle" class="w-5 h-5"></i><h4 class="font-bold text-lg">Challenge: ${c.c.split('(')[0]}</h4></div>
+            <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium whitespace-pre-line">${c.cDesc ? c.cDesc : `(${c.c.split('(')[1] || ''}`}</p>
+          </div>
+          <div class="p-6 bg-green-50/50 dark:bg-green-900/10 flex-1">
+            <div class="flex items-center gap-2 text-green-600 dark:text-green-400 mb-2"><i data-lucide="target" class="w-5 h-5"></i><h4 class="font-bold text-lg">Strategic Solution</h4></div>
+            <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium whitespace-pre-line">${c.s}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // --- Interactive Lab Rendering ---
+    function renderLab(t) {
+      const keys = ['ice', 'hev', 'phev', 'bev', 'fcev'];
+      
+      // Render controls
+      const controlsHtml = keys.map(k => {
+        const themeColor = t.labData[k].colorTheme;
+        const isActive = activeLabTab === k;
+        let colorConfig = '';
+        if (themeColor === 'gray') colorConfig = 'bg-gray-500 hover:bg-gray-600';
+        else if (themeColor === 'yellow') colorConfig = 'bg-yellow-500 hover:bg-yellow-600';
+        else if (themeColor === 'purple') colorConfig = 'bg-purple-500 hover:bg-purple-600';
+        else if (themeColor === 'blue') colorConfig = 'bg-blue-500 hover:bg-blue-600';
+        else if (themeColor === 'cyan') colorConfig = 'bg-cyan-500 hover:bg-cyan-600';
+
+        const activeClasses = `${colorConfig} text-white shadow-lg scale-105`;
+        const inactiveClasses = isDarkTheme ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200';
+        
+        return `<button onclick="setLabTab('${k}')" class="px-5 sm:px-8 py-2.5 sm:py-3 rounded-full font-extrabold text-sm sm:text-lg transition-all duration-300 transform ${isActive ? activeClasses : inactiveClasses}">${t.labData[k].name}</button>`;
+      }).join('');
+      document.getElementById('labControls').innerHTML = controlsHtml;
+
+      // Render Dashboard
+      const act = t.labData[activeLabTab];
+      const tColor = act.colorTheme;
+      
+      let conCls = '', textCls = '', glowCls = '', barColorCls = '';
+      if(tColor === 'gray'){ conCls = isDarkTheme?'border-gray-500/50 bg-gray-900/40':'border-gray-400 bg-gray-50'; textCls = 'text-gray-600 dark:text-gray-400'; glowCls = 'shadow-[0_0_30px_rgba(107,114,128,0.2)]'; barColorCls='bg-gray-500'; }
+      if(tColor === 'yellow'){ conCls = isDarkTheme?'border-yellow-500/50 bg-yellow-900/20':'border-yellow-400 bg-yellow-50'; textCls = 'text-yellow-600 dark:text-yellow-400'; glowCls = 'shadow-[0_0_30px_rgba(234,179,8,0.3)]'; barColorCls='bg-yellow-500'; }
+      if(tColor === 'purple'){ conCls = isDarkTheme?'border-purple-500/50 bg-purple-900/20':'border-purple-400 bg-purple-50'; textCls = 'text-purple-600 dark:text-purple-400'; glowCls = 'shadow-[0_0_30px_rgba(168,85,247,0.3)]'; barColorCls='bg-purple-500'; }
+      if(tColor === 'blue'){ conCls = isDarkTheme?'border-blue-500/50 bg-blue-900/20':'border-blue-400 bg-blue-50'; textCls = 'text-blue-600 dark:text-blue-400'; glowCls = 'shadow-[0_0_30px_rgba(59,130,246,0.3)]'; barColorCls='bg-blue-500'; }
+      if(tColor === 'cyan'){ conCls = isDarkTheme?'border-cyan-500/50 bg-cyan-900/20':'border-cyan-400 bg-cyan-50'; textCls = 'text-cyan-600 dark:text-cyan-400'; glowCls = 'shadow-[0_0_30px_rgba(6,182,212,0.3)]'; barColorCls='bg-cyan-500'; }
+
+      const dashHtml = `
+        <div class="lg:col-span-7 relative p-8 rounded-3xl border-2 transition-all duration-500 flex flex-col justify-center h-full ${conCls} ${glowCls}">
+          <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-8">
+            <div class="p-6 rounded-full flex-shrink-0 ${isDarkTheme?'bg-gray-800':'bg-white'} shadow-xl">
+               <i data-lucide="car" class="w-16 h-16 ${textCls} animate-pulse"></i>
+            </div>
+            <div class="text-center sm:text-left">
+              <h4 class="text-3xl font-black mb-2 ${textCls}">${act.role}</h4>
+              <p class="text-sm font-bold uppercase tracking-widest mb-4 inline-block px-3 py-1 rounded-md bg-black/5 dark:bg-white/10">${act.mechanism}</p>
+              <p class="text-base sm:text-lg leading-relaxed text-gray-700 dark:text-gray-300 font-medium">${act.details}</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mt-auto">
+            <div class="p-4 rounded-2xl ${isDarkTheme?'bg-gray-800/80':'bg-white/80'} shadow-sm border border-gray-200 dark:border-gray-700">
+               <div class="text-xs text-gray-500 mb-1 font-bold uppercase flex items-center"><i data-lucide="pie-chart" class="w-3 h-3 mr-1"></i> BCG & Life Cycle</div>
+               <div class="font-extrabold text-sm sm:text-base">${act.bcg}</div>
+            </div>
+            <div class="p-4 rounded-2xl ${isDarkTheme?'bg-gray-800/80':'bg-white/80'} shadow-sm border border-gray-200 dark:border-gray-700">
+               <div class="text-xs text-gray-500 mb-1 font-bold uppercase flex items-center"><i data-lucide="target" class="w-3 h-3 mr-1"></i> Target Audience</div>
+               <div class="font-extrabold text-sm sm:text-base">${act.target}</div>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-5 space-y-6 bg-gray-50 dark:bg-gray-800/50 p-6 sm:p-8 rounded-3xl border border-gray-100 dark:border-gray-750 shadow-inner h-full flex flex-col justify-center">
+          <h4 class="text-2xl font-black mb-6 border-b pb-4 dark:border-gray-700 flex items-center"><i data-lucide="gauge" class="mr-3 text-red-500 w-6 h-6"></i>${currentLang === 'zh' ? '戰略指標分析' : 'Strategic Metrics'}</h4>
+          <div class="space-y-5">
+            ${createMetricBar(currentLang === 'zh' ? '全球銷量佔比 (2023)' : 'Global Sales Share (2023)', act.stats.share, barColorCls, true)}
+            ${createMetricBar(currentLang === 'zh' ? '現金流與獲利能力' : 'Profitability (Cash Cow)', act.stats.profit, 'bg-yellow-500')}
+            ${createMetricBar(currentLang === 'zh' ? '減碳與環保效益' : 'Eco-friendliness', act.stats.eco, 'bg-green-500')}
+            ${createMetricBar(currentLang === 'zh' ? '未來資本支出與成長' : 'Future CAPEX & Growth', act.stats.future, 'bg-blue-500')}
+          </div>
+        </div>
+      `;
+      document.getElementById('labDashboard').innerHTML = dashHtml;
+      lucide.createIcons();
+    }
+
+    function createMetricBar(label, val, colorClass, isShare=false) {
+      return `
+        <div class="mb-4">
+          <div class="flex justify-between text-sm font-bold mb-2">
+            <span class="text-gray-700 dark:text-gray-300">${label}</span>
+            <span class="${isShare?'text-xl font-black text-red-600 dark:text-red-400':'font-bold'}">${val}%</span>
+          </div>
+          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden shadow-inner">
+            <div class="h-full rounded-full transition-all duration-1000 ease-out relative ${colorClass}" style="width: ${val}%">
+              <div class="absolute top-0 left-0 right-0 bottom-0 bg-white/20"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function setLabTab(tab) {
+      activeLabTab = tab;
+      renderLab(content[currentLang]);
+    }
+
+    // --- Events & Setup ---
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // Lang Toggle
+      langToggleBtn.addEventListener('click', () => {
+        currentLang = currentLang === 'en' ? 'zh' : 'en';
+        langText.textContent = currentLang === 'en' ? '繁中' : 'EN';
+        document.documentElement.lang = currentLang === 'en' ? 'en' : 'zh-TW';
+        renderApp();
+      });
+
+      // Theme Toggle
+      themeToggleBtn.addEventListener('click', () => {
+        isDarkTheme = !isDarkTheme;
+        if(isDarkTheme) document.documentElement.classList.add('dark');
+        else document.documentElement.classList.remove('dark');
+        renderApp();
+      });
+
+      // Glossary
+      glossaryBtn.addEventListener('click', () => {
+        glossaryModal.classList.remove('hidden');
+        glossaryModal.classList.add('flex');
+        setTimeout(() => document.getElementById('glossaryPanel').classList.remove('translate-x-full'), 10);
+      });
+      const closeGl = () => {
+        document.getElementById('glossaryPanel').classList.add('translate-x-full');
+        setTimeout(() => {
+          glossaryModal.classList.add('hidden');
+          glossaryModal.classList.remove('flex');
+        }, 300);
+      };
+      glossaryClose.addEventListener('click', closeGl);
+      glossaryOverlay.addEventListener('click', closeGl);
+
+      // Scroll to Top
+      window.addEventListener('scroll', () => {
+        if(window.scrollY > 300) {
+          scrollTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+          scrollTopBtn.classList.add('opacity-100', 'translate-y-0');
+        } else {
+          scrollTopBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+          scrollTopBtn.classList.remove('opacity-100', 'translate-y-0');
+        }
+      });
+      scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+      // Audio
+      audioBtn.addEventListener('click', () => {
+        if (!('speechSynthesis' in window)) {
+          alert("Your browser does not support audio guide.");
+          return;
+        }
+        window.speechSynthesis.cancel();
+        if (isAudioPlaying) {
+          isAudioPlaying = false;
+          audioIcon.classList.remove('animate-pulse');
+          return;
+        }
+        const utterance = new SpeechSynthesisUtterance(content[currentLang].summaryText);
+        const voices = window.speechSynthesis.getVoices();
+        
+        if (currentLang === 'zh') {
+          const twVoice = voices.find(v => v.name.includes('Yating') && v.lang.includes('zh-TW')) || voices.find(v => v.name.includes('Yating')) || voices.find(v => v.lang.includes('zh-TW')) || voices.find(v => v.lang.includes('zh'));
+          if (twVoice) utterance.voice = twVoice;
+        } else {
+          const ukVoice = voices.find(v => (v.name.includes('UK') || v.name.includes('British') || v.lang === 'en-GB') && (v.name.includes('Male') || v.name.includes('George'))) || voices.find(v => v.lang.includes('en-GB')) || voices.find(v => v.lang.includes('en') && v.name.includes('Male')) || voices.find(v => v.lang.includes('en'));
+          if (ukVoice) utterance.voice = ukVoice;
+        }
+        
+        utterance.onend = () => {
+          isAudioPlaying = false;
+          audioIcon.classList.remove('animate-pulse');
+        };
+        isAudioPlaying = true;
+        audioIcon.classList.add('animate-pulse');
+        window.speechSynthesis.speak(utterance);
+      });
+
+      // Make functions globally available for inline onclick handlers
+      window.setTp2Tab = setTp2Tab;
+      window.setTp3Tab = setTp3Tab;
+      window.setLabTab = setLabTab;
+
+      // Ensure voices are loaded (Chrome issue fix)
+      if(speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = () => {};
+      }
+
+      // Initial Render
+      renderApp();
+    });
+  </script>
+</body>
+</html>
